@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,6 +32,7 @@ public class MapManager : MonoBehaviour
     private Vector2 startingPos;
 
     private GameObject[] checkpoints;
+    private string[,] currentMap;
 
     public GameObject[] Checkpoints { get { return checkpoints; } }
 
@@ -40,7 +42,7 @@ public class MapManager : MonoBehaviour
         xOffset = 1.0f;
         yOffset = 1.0f;
 
-        startingPos = new Vector2(-8.0f, 4.0f);
+        startingPos = new Vector2(-8.0f, 3.5f);
 
         CreateMap();
     }
@@ -56,7 +58,7 @@ public class MapManager : MonoBehaviour
     /// </summary>
     private void CreateMap()
 	{
-        // Define the map and spawn it
+        // Create the map layout
         string[,] mapLayout = new string[,] {
             { " ", " ", " ",  " ", " ", " ", " ",  " ", " ", " ", " ",  " ", " ", " ", " ",  " ", " " },
             { " ", " ", "C0", " ", " ", " ", "C3", "=", "=", "=", "C4", " ", " ", " ", "C7", " ", " " },
@@ -69,22 +71,30 @@ public class MapManager : MonoBehaviour
             { " ", " ", " ",  " ", " ", " ", " ",  " ", " ", " ", " ",  " ", " ", " ", " ",  " ", " " }
         };
 
-        SpawnMap(mapLayout, 8);
+        currentMap = mapLayout;
+        checkpoints = new GameObject[8];
     }
 
     /// <summary>
-    /// Instantiates a map into the scene
+    /// Spawns the current map into the scene
+    /// </summary>
+    public void SpawnCurrentMap()
+	{
+        SpawnMap(currentMap);
+	}
+
+    /// <summary>
+    /// Builds and instantiates each map element into the scene
     /// </summary>
     /// <param name="mapLayout">The map info</param>
-    /// <param name="checkpointCount">The number of checkpoints</param>
-    private void SpawnMap(string[,] mapLayout, int checkpointCount)
+    private void SpawnMap(string[,] mapLayout)
 	{
-        checkpoints = new GameObject[checkpointCount];
-
+        // Loop through the map layout
         for(int r = 0; r < mapLayout.GetLength(0); r++)
         {
             for(int c = 0; c < mapLayout.GetLength(1); c++)
             {
+                // Create a map object based on the string "code" at that index
                 switch(mapLayout[r, c].Substring(0, 1))
                 {
                     // Checkpoint
@@ -104,7 +114,20 @@ public class MapManager : MonoBehaviour
             }
         }
 
+        // Chain the checkpoints together 
         LinkCheckpoints();
+    }
+
+    /// <summary>
+    /// Clears containers and map object parent objects 
+    /// </summary>
+    public void ClearMap()
+	{
+        Array.Clear(checkpoints, 0, checkpoints.Length);
+
+        // Clear all checkpoints and tiles
+        StaticHelpers.ClearParent(checkpointsParent);
+        StaticHelpers.ClearParent(tilesParent);
     }
 
     /// <summary>
