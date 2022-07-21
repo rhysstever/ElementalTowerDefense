@@ -2,6 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum TowerType
+{
+    // Tier 1
+    Air,
+    Earth,
+    Fire,
+    Water,
+
+    // Tier 2 - single elemet
+    Tornado,
+    Earthquake,
+    Flamethrower,
+    Tsunami,
+
+    // Tier 2 - double element
+    Wildfire,
+    Volcano,
+    Hurricane,
+    Blizzard
+}
+
 public class TowerManager : MonoBehaviour
 {
     #region Singleton Code
@@ -22,84 +43,85 @@ public class TowerManager : MonoBehaviour
     }
     #endregion
 
-    [SerializeField]    // Object parents
-    private GameObject towersParent, bulletsParent;
-    [SerializeField]    // Tower Prefabs
-    private GameObject towerPrefab;
+    private GameObject[] towerPrefabs;
+    private Dictionary<TowerType, TowerInfo> towerInfo;
 
-    private GameObject currentSelection;
-
-    public GameObject CurrentSelection { get { return currentSelection;} }
+    public Dictionary<TowerType, TowerInfo> TowerInfo { get { return towerInfo; } }
 
     // Start is called before the first frame update
     void Start()
     {
-        currentSelection = null;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.B))
-            Build();
-        else if(Input.GetKeyDown(KeyCode.S))
-            Sell();
+        towerPrefabs = Resources.LoadAll<GameObject>("Prefabs/GameObjects/Towers");
+        CreateTowerInfoDictionary();
     }
 
     /// <summary>
-    /// Selects a new gameObject
+    /// Sets info for each type of tower
     /// </summary>
-    /// <param name="selection">The gameObject that is selected</param>
-	public void Select(GameObject selection)
+    private void CreateTowerInfoDictionary()
 	{
-		currentSelection = selection;
+        towerInfo = new Dictionary<TowerType, TowerInfo>();
+
+        // === Create TowerInfo objects for each element ===
+        // Tier 1
+        towerInfo.Add(TowerType.Air, 
+            new TowerInfo(GetTowerPrefab(TowerType.Air), TowerType.Air, 0, 0, 0));
+        towerInfo.Add(TowerType.Earth, 
+            new TowerInfo(GetTowerPrefab(TowerType.Earth), TowerType.Earth, 0, 0, 0));
+        towerInfo.Add(TowerType.Fire,
+            new TowerInfo(GetTowerPrefab(TowerType.Fire), TowerType.Fire, 0, 0, 0));
+        towerInfo.Add(TowerType.Water,
+            new TowerInfo(GetTowerPrefab(TowerType.Water), TowerType.Water, 0, 0, 0));
+
+        // Tier 2 - single element
+        towerInfo.Add(TowerType.Tornado,
+            new TowerInfo(GetTowerPrefab(TowerType.Tornado), TowerType.Tornado, 0, 0, 0));
+        towerInfo.Add(TowerType.Earthquake,
+            new TowerInfo(GetTowerPrefab(TowerType.Earthquake), TowerType.Earthquake, 0, 0, 0));
+        towerInfo.Add(TowerType.Flamethrower,
+            new TowerInfo(GetTowerPrefab(TowerType.Flamethrower), TowerType.Flamethrower, 0, 0, 0));
+        towerInfo.Add(TowerType.Tsunami,
+            new TowerInfo(GetTowerPrefab(TowerType.Tsunami), TowerType.Tsunami, 0, 0, 0));
+
+        // Tier 2 - double element
+        towerInfo.Add(TowerType.Wildfire,
+            new TowerInfo(GetTowerPrefab(TowerType.Wildfire), TowerType.Wildfire, 0, 0, 0));
+        towerInfo.Add(TowerType.Volcano,
+            new TowerInfo(GetTowerPrefab(TowerType.Volcano), TowerType.Volcano, 0, 0, 0));
+        towerInfo.Add(TowerType.Hurricane,
+            new TowerInfo(GetTowerPrefab(TowerType.Hurricane), TowerType.Hurricane, 0, 0, 0));
+        towerInfo.Add(TowerType.Blizzard,
+            new TowerInfo(GetTowerPrefab(TowerType.Blizzard), TowerType.Blizzard, 0, 0, 0));
+
+        // === Add Upgrades ===
+        // Tier 2 - single element 
+        towerInfo[TowerType.Air].AddUpgrade(towerInfo[TowerType.Tornado], TowerType.Air);
+        towerInfo[TowerType.Earth].AddUpgrade(towerInfo[TowerType.Earthquake], TowerType.Earth);
+        towerInfo[TowerType.Fire].AddUpgrade(towerInfo[TowerType.Flamethrower], TowerType.Fire);
+        towerInfo[TowerType.Water].AddUpgrade(towerInfo[TowerType.Tsunami], TowerType.Water);
+
+        // Tier 2 - double element
+        towerInfo[TowerType.Air].AddUpgrade(towerInfo[TowerType.Wildfire], TowerType.Fire);
+        towerInfo[TowerType.Air].AddUpgrade(towerInfo[TowerType.Hurricane], TowerType.Water);
+        towerInfo[TowerType.Earth].AddUpgrade(towerInfo[TowerType.Volcano], TowerType.Fire);
+        towerInfo[TowerType.Earth].AddUpgrade(towerInfo[TowerType.Blizzard], TowerType.Water);
+        towerInfo[TowerType.Fire].AddUpgrade(towerInfo[TowerType.Wildfire], TowerType.Air);
+        towerInfo[TowerType.Fire].AddUpgrade(towerInfo[TowerType.Volcano], TowerType.Earth);
+        towerInfo[TowerType.Water].AddUpgrade(towerInfo[TowerType.Hurricane], TowerType.Air);
+        towerInfo[TowerType.Water].AddUpgrade(towerInfo[TowerType.Blizzard], TowerType.Earth);
+    }
+
+    /// <summary>
+    /// Gets a tower's prefab
+    /// </summary>
+    /// <param name="type">The type of tower</param>
+    /// <returns>A tower's prefab game object, null if not found</returns>
+    private GameObject GetTowerPrefab(TowerType type)
+	{
+        for(int i = 0; i < towerPrefabs.Length; i++)
+            if(towerPrefabs[i].GetComponent<Tower>().Type == type)
+                return towerPrefabs[i];
+
+        return null;
 	}
-
-    /// <summary>
-    /// Builds a tower
-    /// </summary>
-    public void Build()
-	{
-        // Check that the current selection is a tile
-        if(currentSelection == null
-            || currentSelection.tag != "Tile")
-		{
-            Debug.Log("You can only build on a tile!");
-            return;
-		}
-
-        // Create the tower 
-        GameObject newTower = Instantiate(towerPrefab, currentSelection.transform.position, Quaternion.identity, towersParent.transform);
-        newTower.name = "tower" + (towersParent.transform.childCount - 1);
-
-        // Link the tile and tower to each other
-        currentSelection.GetComponent<Tile>().Tower = newTower;
-        newTower.GetComponent<Tower>().Tile = currentSelection;
-
-        // Deactivate the tile and select the new tower
-        currentSelection.SetActive(false);
-        Select(newTower);
-	}
-
-    /// <summary>
-    /// Sells the current tower
-    /// </summary>
-    public void Sell()
-	{
-        // Check that the current selection is a tower
-        if(currentSelection == null
-            || currentSelection.tag != "Tower")
-        {
-            Debug.Log("You can only sell towers!");
-            return;
-        }
-
-        // Select the tile under the tower
-        Select(currentSelection.GetComponent<Tower>().Tile);
-        currentSelection.SetActive(true);
-
-        // Destroy the tower and unlink it from the tile
-        Destroy(currentSelection.GetComponent<Tile>().Tower);
-        currentSelection.GetComponent<Tile>().Tower = null;
-    }
 }

@@ -217,9 +217,10 @@ GameObject:
   m_Component:
   - component: {fileID: 441049748}
   - component: {fileID: 441049747}
+  - component: {fileID: 441049753}
   - component: {fileID: 441049750}
-  - component: {fileID: 441049749}
   - component: {fileID: 441049751}
+  - component: {fileID: 441049749}
   - component: {fileID: 441049752}
   m_Layer: 0
   m_Name: gameManager
@@ -323,6 +324,18 @@ MonoBehaviour:
   resumeButton: {fileID: 1473623838}
   pauseToMainButton: {fileID: 339316247}
   gameEndToMainButton: {fileID: 1932004917}
+--- !u!114 &441049753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 441049746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d22a4fd20eb7ca944a2c9cacce70cc79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &446162114
 GameObject:
   m_ObjectHideFlags: 0
@@ -419,7 +432,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519420028
 GameObject:
@@ -602,7 +615,7 @@ RectTransform:
   - {fileID: 1390846071}
   - {fileID: 1117461012}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1730,7 +1743,7 @@ Transform:
   - {fileID: 1322226749}
   - {fileID: 975310691}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1390846070
 GameObject:

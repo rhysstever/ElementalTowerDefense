@@ -19,6 +19,6 @@ public class Selectable : MonoBehaviour
 	private void OnMouseDown()
 	{
         // Select this gameobject
-        TowerManager.instance.Select(gameObject);
+        BuildManager.instance.Select(gameObject);
 	}
 }

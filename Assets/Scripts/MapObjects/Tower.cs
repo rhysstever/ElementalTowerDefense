@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class Tower : MonoBehaviour
 {
-    private GameObject tile;
+    [SerializeField]
+    private TowerType type;
+    private GameObject tile;    
 
+    public TowerType Type { get { return type; } }
     public GameObject Tile 
     { 
         get { return tile; } 

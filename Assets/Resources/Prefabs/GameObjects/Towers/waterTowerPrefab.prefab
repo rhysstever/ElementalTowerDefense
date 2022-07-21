@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7995103581794916472}
   - component: {fileID: 938929096018288353}
   m_Layer: 0
-  m_Name: towerPrefab
+  m_Name: waterTowerPrefab
   m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 2747690628134850419, guid: b670ab75dde984907b8570040daa08c5, type: 3}
-  m_Color: {r: 0.18835144, g: 0.764151, b: 0.16941082, a: 1}
+  m_Color: {r: 0, g: 0, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -127,3 +127,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c9ddd6a7114026439ae7d08ef192905, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 3
