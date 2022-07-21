@@ -65,7 +65,7 @@ public class TowerManager : MonoBehaviour
         // === Create TowerInfo objects for each element ===
         // Tier 1
         towerInfo.Add(TowerType.Air, 
-            new TowerInfo(GetTowerPrefab(TowerType.Air), TowerType.Air, 0, 0, 0));
+            new TowerInfo(GetTowerPrefab(TowerType.Air), TowerType.Air, 20, 1, 50));
         towerInfo.Add(TowerType.Earth, 
             new TowerInfo(GetTowerPrefab(TowerType.Earth), TowerType.Earth, 0, 0, 0));
         towerInfo.Add(TowerType.Fire,

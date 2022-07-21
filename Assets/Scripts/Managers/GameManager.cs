@@ -81,14 +81,16 @@ public class GameManager : MonoBehaviour
                 health = 100;
                 money = 100;
                 MapManager.instance.ClearMap();
-
                 break;
             case MenuState.Game:
                 EnemyManager.instance.SetupEnemyWaves();
 
-                // Creates the map if the player is coming from the main menu
+                // If the player is going from the Main Menu to the Game state
                 if(currentMenuState == MenuState.MainMenu)
-                    MapManager.instance.SpawnCurrentMap();
+				{
+                    MapManager.instance.SpawnCurrentMap();  // Create the map
+                    BuildManager.instance.Select(null); // Set initial selection
+                }
                 break;
             case MenuState.Pause:
                 break;

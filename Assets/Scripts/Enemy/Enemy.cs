@@ -33,8 +33,7 @@ public class Enemy : MonoBehaviour
 
 	void FixedUpdate()
 	{
-        if(CanMove())
-            Move();
+        Move();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -82,6 +81,9 @@ public class Enemy : MonoBehaviour
     /// </summary>
 	private void Move()
 	{
+        if(!CanMove())
+            return;
+
 		Vector2 direction = currentCheckpoint.transform.position - transform.position;
         direction.Normalize();
         direction *= moveSpeed * Time.deltaTime;

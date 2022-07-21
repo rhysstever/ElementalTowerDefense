@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,6 +32,10 @@ public class UIManager : MonoBehaviour
     private GameObject resumeButton, pauseToMainButton;
     [SerializeField]    // Game End buttons
     private GameObject gameEndToMainButton;
+    [SerializeField]    // Player Stats Text
+    private GameObject healthText, moneyText;
+    [SerializeField]    // Selected Object parent panel
+    private GameObject selectedObjectPanel;
 
     private Dictionary<MenuState, GameObject> menuStateUIParents;
 
@@ -62,6 +67,9 @@ public class UIManager : MonoBehaviour
         menuStateUIParents.Add(MenuState.GameEnd, gameEndParent);
     }
 
+    /// <summary>
+    /// Creates on click listeners for each button in the scene
+    /// </summary>
     private void SetupUI()
 	{
         playButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.Game));
@@ -85,5 +93,49 @@ public class UIManager : MonoBehaviour
             else 
                 menuStateUIParents[menuState].SetActive(menuState == newMenuState);
 		}
+    }
+
+    /// <summary>
+    /// Updates the text for player stats
+    /// </summary>
+    public void UpdatePlayerStatsText()
+	{
+        int health = GameManager.instance.health;
+        int money = GameManager.instance.money;
+
+        healthText.GetComponent<TMP_Text>().text = "Health: " + health;
+        moneyText.GetComponent<TMP_Text>().text = "Money: " + money;
+    }
+
+    /// <summary>
+    /// Updates UI to display info about the currently selected game object
+    /// </summary>
+    /// <param name="selectedGameObj">The currently selected game object</param>
+    public void UpdateSelectedObjectUI(GameObject selectedGameObj)
+	{
+        if(selectedGameObj == null)
+            selectedObjectPanel.SetActive(false);
+        else if(selectedGameObj.tag == "Tile")
+        {
+            selectedObjectPanel.SetActive(true);
+            selectedObjectPanel.transform.GetChild(0).gameObject.SetActive(true);
+            selectedObjectPanel.transform.GetChild(0).GetComponent<TMP_Text>().text = "Tile";
+            selectedObjectPanel.transform.GetChild(1).gameObject.SetActive(false);
+            selectedObjectPanel.transform.GetChild(2).gameObject.SetActive(false);
+        }
+        else if(selectedGameObj.tag == "Tower")
+		{
+            selectedObjectPanel.SetActive(true);
+            selectedObjectPanel.transform.GetChild(0).gameObject.SetActive(true);
+            TowerType type = selectedGameObj.GetComponent<Tower>().Type;
+            TowerInfo towerInfo = TowerManager.instance.TowerInfo[type];
+            selectedObjectPanel.transform.GetChild(0).GetComponent<TMP_Text>().text = type + " Tower";
+            selectedObjectPanel.transform.GetChild(1).gameObject.SetActive(true);
+            selectedObjectPanel.transform.GetChild(1).GetComponent<TMP_Text>().text = "Damage: " + towerInfo.Damage;
+            selectedObjectPanel.transform.GetChild(2).gameObject.SetActive(true);
+            selectedObjectPanel.transform.GetChild(2).GetComponent<TMP_Text>().text = "Attack Speed: " + towerInfo.AttackSpeed;
+        }
+        else
+            selectedObjectPanel.SetActive(false);
     }
 }

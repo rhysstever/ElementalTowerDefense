@@ -29,18 +29,19 @@ public class BuildManager : MonoBehaviour
 
     public GameObject CurrentSelection { get { return currentSelection;} }
 
-    //TODO: Remove
+    //TODO: Remove when build buttons are created
     public TowerType currentType;
 
     // Start is called before the first frame update
     void Start()
     {
-        currentSelection = null;
+        
     }
 
     // Update is called once per frame
     void Update()
     {
+        //TODO: Remove when build/sell buttons are created
         if(Input.GetKeyDown(KeyCode.B))
             Build(currentType);
         else if(Input.GetKeyDown(KeyCode.S))
@@ -54,20 +55,56 @@ public class BuildManager : MonoBehaviour
 	public void Select(GameObject selection)
 	{
 		currentSelection = selection;
-	}
+
+        // Update UI
+        UIManager.instance.UpdateSelectedObjectUI(currentSelection);
+    }
 
     /// <summary>
-    /// Builds a tower
+    /// Checks if the player can buy a certain tower
     /// </summary>
-    public void Build(TowerType type)
+    /// <param name="type">The type of tower</param>
+    /// <returns>Whether the player can buy the tower</returns>
+    private bool CanBuild(TowerType type)
 	{
         // Check that the current selection is a tile
         if(currentSelection == null
             || currentSelection.tag != "Tile")
-		{
+        {
             Debug.Log("You can only build on a tile!");
+            return false;
+        }
+        
+        // Check that the tile does not already have a tower built on it
+        if(currentSelection.GetComponent<Tile>().Tower
+            != null)
+		{
+            Debug.Log("This tile already has a tower built on it!");
+            return false;
+        }
+
+        // Check that the player has enough money to afford the tower
+        int cost = TowerManager.instance.TowerInfo[type].Cost;
+        if(GameManager.instance.money < cost)
+		{
+            Debug.Log("You do not have enough money!");
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Builds a tower
+    /// </summary>
+    /// <param name="type">The type of tower</param>
+    public void Build(TowerType type)
+	{
+        if(!CanBuild(type))
             return;
-		}
+
+        // Remove the money from the player
+        GameManager.instance.money -= TowerManager.instance.TowerInfo[type].Cost;
 
         // Create the tower 
         GameObject newTower = Instantiate(
@@ -84,7 +121,10 @@ public class BuildManager : MonoBehaviour
         // Deactivate the tile and select the new tower
         currentSelection.SetActive(false);
         Select(newTower);
-	}
+
+        // Update player stats UI
+        UIManager.instance.UpdatePlayerStatsText();
+    }
 
     /// <summary>
     /// Sells the current tower
@@ -99,6 +139,10 @@ public class BuildManager : MonoBehaviour
             return;
         }
 
+        // Give the player 1/2 the cost of the tower
+        int cost = TowerManager.instance.TowerInfo[currentSelection.GetComponent<Tower>().Type].Cost;
+        GameManager.instance.money += cost / 2;
+
         // Select the tile under the tower
         Select(currentSelection.GetComponent<Tower>().Tile);
         currentSelection.SetActive(true);
@@ -106,5 +150,8 @@ public class BuildManager : MonoBehaviour
         // Destroy the tower and unlink it from the tile
         Destroy(currentSelection.GetComponent<Tile>().Tower);
         currentSelection.GetComponent<Tile>().Tower = null;
+
+        // Update player stats UI
+        UIManager.instance.UpdatePlayerStatsText();
     }
 }
