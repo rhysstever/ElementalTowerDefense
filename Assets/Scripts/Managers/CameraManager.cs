@@ -24,6 +24,9 @@ public class CameraManager : MonoBehaviour
         MoveCamera();
     }
 
+    /// <summary>
+    /// Moves the camera laterally around the scene
+    /// </summary>
     private void MoveCamera()
 	{
         if(mainCam == null)
@@ -31,6 +34,7 @@ public class CameraManager : MonoBehaviour
 
         Vector2 direction = Vector2.zero;
 
+        // TODO: Use Unity Input System
         // Up
         if(Input.GetKey(KeyCode.W))
             direction.y += 1;
@@ -53,21 +57,18 @@ public class CameraManager : MonoBehaviour
         CheckBounds();
     }
 
+    /// <summary>
+    /// Ensures the camera stays within bounds
+    /// </summary>
     private void CheckBounds()
 	{
         Vector3 clampedPos = mainCam.transform.position;
 
-        // Check Vertical Bounds
-        if(clampedPos.y > yBounds)
-            clampedPos.y = yBounds;
-        else if(clampedPos.y < -yBounds)
-            clampedPos.y = -yBounds;
-
         // Check Horizontal Bounds
-        if(clampedPos.x > xBounds)
-            clampedPos.x = xBounds;
-        else if(clampedPos.x < -xBounds)
-            clampedPos.x = -xBounds;
+        clampedPos.x = Mathf.Clamp(clampedPos.x, -xBounds, xBounds);
+
+        // Check Vertical Bounds
+        clampedPos.y = Mathf.Clamp(clampedPos.y, -yBounds, yBounds);
 
         mainCam.transform.position = clampedPos;
     }
