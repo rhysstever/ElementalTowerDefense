@@ -43,15 +43,19 @@ public class TowerManager : MonoBehaviour
     }
     #endregion
 
-    private GameObject[] towerPrefabs;
+    [SerializeField]
+    private GameObject towerPrefab;
+
+    private Dictionary<TowerType, Sprite> towerSprites;
     private Dictionary<TowerType, TowerInfo> towerInfo;
 
+    public GameObject TowerPrefab { get { return towerPrefab; } }
     public Dictionary<TowerType, TowerInfo> TowerInfo { get { return towerInfo; } }
 
     // Start is called before the first frame update
     void Start()
     {
-        towerPrefabs = Resources.LoadAll<GameObject>("Prefabs/GameObjects/Towers");
+        SetupTowerSpriteDictionary();
         CreateTowerInfoDictionary();
     }
 
@@ -65,63 +69,47 @@ public class TowerManager : MonoBehaviour
         // === Create TowerInfo objects for each element ===
         // Tier 1
         towerInfo.Add(TowerType.Air, 
-            new TowerInfo(GetTowerPrefab(TowerType.Air), TowerType.Air, 20, 1, 50));
+            new TowerInfo(towerSprites[TowerType.Air], TowerType.Air, 20, 1, 50));
         towerInfo.Add(TowerType.Earth, 
-            new TowerInfo(GetTowerPrefab(TowerType.Earth), TowerType.Earth, 0, 0, 0));
+            new TowerInfo(towerSprites[TowerType.Earth], TowerType.Earth, 0, 0, 0));
         towerInfo.Add(TowerType.Fire,
-            new TowerInfo(GetTowerPrefab(TowerType.Fire), TowerType.Fire, 0, 0, 0));
+            new TowerInfo(towerSprites[TowerType.Fire], TowerType.Fire, 0, 0, 0));
         towerInfo.Add(TowerType.Water,
-            new TowerInfo(GetTowerPrefab(TowerType.Water), TowerType.Water, 0, 0, 0));
+            new TowerInfo(towerSprites[TowerType.Water], TowerType.Water, 0, 0, 0));
 
-        // Tier 2 - single element
-        towerInfo.Add(TowerType.Earthquake,
-            new TowerInfo(GetTowerPrefab(TowerType.Earthquake), TowerType.Earthquake, 0, 0, 0));
-        towerInfo.Add(TowerType.Flamethrower,
-            new TowerInfo(GetTowerPrefab(TowerType.Flamethrower), TowerType.Flamethrower, 0, 0, 0));
-        towerInfo.Add(TowerType.Tornado,
-            new TowerInfo(GetTowerPrefab(TowerType.Tornado), TowerType.Tornado, 0, 0, 0));
-        towerInfo.Add(TowerType.Tsunami,
-            new TowerInfo(GetTowerPrefab(TowerType.Tsunami), TowerType.Tsunami, 0, 0, 0));
+        // TODO: Tier 2 - single element
 
-        // Tier 2 - double element
-        towerInfo.Add(TowerType.Flood,
-            new TowerInfo(GetTowerPrefab(TowerType.Flood), TowerType.Flood, 0, 0, 0));
-        towerInfo.Add(TowerType.Blizzard,
-            new TowerInfo(GetTowerPrefab(TowerType.Blizzard), TowerType.Blizzard, 0, 0, 0));
-        towerInfo.Add(TowerType.Wildfire,
-            new TowerInfo(GetTowerPrefab(TowerType.Wildfire), TowerType.Wildfire, 0, 0, 0));
-        towerInfo.Add(TowerType.Volcano,
-            new TowerInfo(GetTowerPrefab(TowerType.Volcano), TowerType.Volcano, 0, 0, 0));
+        // TODO: Tier 2 - double element
 
-        // === Add Upgrades ===
-        // Tier 2 - single element 
-        towerInfo[TowerType.Air].AddUpgrade(towerInfo[TowerType.Tornado], TowerType.Air);
-        towerInfo[TowerType.Earth].AddUpgrade(towerInfo[TowerType.Earthquake], TowerType.Earth);
-        towerInfo[TowerType.Fire].AddUpgrade(towerInfo[TowerType.Flamethrower], TowerType.Fire);
-        towerInfo[TowerType.Water].AddUpgrade(towerInfo[TowerType.Tsunami], TowerType.Water);
+        // TODO: Tower Upgrade
+        //// === Add Upgrades ===
+        //// Tier 2 - single element 
+        //towerInfo[TowerType.Air].AddUpgrade(towerInfo[TowerType.Tornado], TowerType.Air);
+        //towerInfo[TowerType.Earth].AddUpgrade(towerInfo[TowerType.Earthquake], TowerType.Earth);
+        //towerInfo[TowerType.Fire].AddUpgrade(towerInfo[TowerType.Flamethrower], TowerType.Fire);
+        //towerInfo[TowerType.Water].AddUpgrade(towerInfo[TowerType.Tsunami], TowerType.Water);
 
-        // Tier 2 - double element
-        towerInfo[TowerType.Air].AddUpgrade(towerInfo[TowerType.Wildfire], TowerType.Fire);
-        towerInfo[TowerType.Air].AddUpgrade(towerInfo[TowerType.Blizzard], TowerType.Water);
-        towerInfo[TowerType.Earth].AddUpgrade(towerInfo[TowerType.Volcano], TowerType.Fire);
-        towerInfo[TowerType.Earth].AddUpgrade(towerInfo[TowerType.Flood], TowerType.Water);
-        towerInfo[TowerType.Fire].AddUpgrade(towerInfo[TowerType.Wildfire], TowerType.Air);
-        towerInfo[TowerType.Fire].AddUpgrade(towerInfo[TowerType.Volcano], TowerType.Earth);
-        towerInfo[TowerType.Water].AddUpgrade(towerInfo[TowerType.Blizzard], TowerType.Air);
-        towerInfo[TowerType.Water].AddUpgrade(towerInfo[TowerType.Flood], TowerType.Earth);
+        //// Tier 2 - double element
+        //towerInfo[TowerType.Air].AddUpgrade(towerInfo[TowerType.Wildfire], TowerType.Fire);
+        //towerInfo[TowerType.Air].AddUpgrade(towerInfo[TowerType.Blizzard], TowerType.Water);
+        //towerInfo[TowerType.Earth].AddUpgrade(towerInfo[TowerType.Volcano], TowerType.Fire);
+        //towerInfo[TowerType.Earth].AddUpgrade(towerInfo[TowerType.Flood], TowerType.Water);
+        //towerInfo[TowerType.Fire].AddUpgrade(towerInfo[TowerType.Wildfire], TowerType.Air);
+        //towerInfo[TowerType.Fire].AddUpgrade(towerInfo[TowerType.Volcano], TowerType.Earth);
+        //towerInfo[TowerType.Water].AddUpgrade(towerInfo[TowerType.Blizzard], TowerType.Air);
+        //towerInfo[TowerType.Water].AddUpgrade(towerInfo[TowerType.Flood], TowerType.Earth);
     }
 
-    /// <summary>
-    /// Gets a tower's prefab
-    /// </summary>
-    /// <param name="type">The type of tower</param>
-    /// <returns>A tower's prefab game object, null if not found</returns>
-    private GameObject GetTowerPrefab(TowerType type)
+    private void SetupTowerSpriteDictionary()
 	{
-        for(int i = 0; i < towerPrefabs.Length; i++)
-            if(towerPrefabs[i].GetComponent<Tower>().Type == type)
-                return towerPrefabs[i];
+        towerSprites = new Dictionary<TowerType, Sprite>();
+        Sprite[] loadedSprites = Resources.LoadAll<Sprite>("Sprites/ElementIcons");
 
-        return null;
-	}
+        for (int i = 0; i < loadedSprites.Length; i++)
+		{
+            string towerName = loadedSprites[i].name.Substring(4);
+            TowerType type = (TowerType)System.Enum.Parse(typeof(TowerType), towerName);
+            towerSprites.Add(type, loadedSprites[i]);
+        }
+    }
 }

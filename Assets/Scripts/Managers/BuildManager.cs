@@ -112,11 +112,14 @@ public class BuildManager : MonoBehaviour
 
         // Create the tower 
         GameObject newTower = Instantiate(
-            TowerManager.instance.TowerInfo[type].Prefab, 
+            TowerManager.instance.TowerPrefab, 
             currentSelection.transform.position, 
             Quaternion.identity, 
             towersParent.transform);
         newTower.name = "tower" + (towersParent.transform.childCount - 1);
+
+        // Setup Tower
+        newTower.GetComponent<Tower>().SetupTower(type);
 
         // Link the tile and tower to each other
         currentSelection.GetComponent<Tile>().Tower = newTower;

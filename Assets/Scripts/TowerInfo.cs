@@ -4,23 +4,23 @@ using UnityEngine;
 
 public class TowerInfo
 {
-	private GameObject prefab;
+	private Sprite sprite;
 	private TowerType type;
 	private int cost;
 	private int damage;
 	private int attackSpeed;
 	private Dictionary<TowerInfo, TowerType> upgrades;
 
-	public GameObject Prefab { get { return prefab; } }
+	public Sprite Sprite { get { return sprite; } }
 	public TowerType Type { get { return type; } }
 	public int Cost { get { return cost; } }
 	public int Damage { get { return damage; } }
 	public int AttackSpeed { get { return attackSpeed;} }
 	public Dictionary<TowerInfo,TowerType> Upgrades { get { return upgrades;} }
 
-	public TowerInfo(GameObject prefab, TowerType type, int cost, int damage, int attackSpeed)
+	public TowerInfo(Sprite sprite, TowerType type, int cost, int damage, int attackSpeed)
 	{
-		this.prefab = prefab;
+		this.sprite = sprite;
 		this.type = type;
 		this.cost = cost;
 		this.damage = damage;

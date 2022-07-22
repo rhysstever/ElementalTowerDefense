@@ -26,4 +26,11 @@ public class Tower : MonoBehaviour
     {
         
     }
+
+    public void SetupTower(TowerType type)
+	{
+        // Set type and sprite
+        this.type = type;
+        GetComponent<SpriteRenderer>().sprite = TowerManager.instance.TowerInfo[type].Sprite;
+    }
 }
