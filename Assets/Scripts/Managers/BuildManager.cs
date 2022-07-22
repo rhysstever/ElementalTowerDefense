@@ -42,9 +42,9 @@ public class BuildManager : MonoBehaviour
     void Update()
     {
         //TODO: Remove when build/sell buttons are created
-        if(Input.GetKeyDown(KeyCode.B))
+        if(Input.GetKeyDown(KeyCode.E))
             Build(currentType);
-        else if(Input.GetKeyDown(KeyCode.S))
+        else if(Input.GetKeyDown(KeyCode.Q))
             Sell();
     }
 
@@ -54,6 +54,10 @@ public class BuildManager : MonoBehaviour
     /// <param name="selection">The gameObject that is selected</param>
 	public void Select(GameObject selection)
 	{
+        if(currentSelection != null
+            && currentSelection.GetComponent<Selectable>() != null)
+            currentSelection.GetComponent<Selectable>().Deselect();
+
 		currentSelection = selection;
 
         // Update UI

@@ -11,16 +11,16 @@ public enum TowerType
     Water,
 
     // Tier 2 - single elemet
-    Tornado,
     Earthquake,
     Flamethrower,
+    Tornado,
     Tsunami,
 
     // Tier 2 - double element
-    Wildfire,
+    Blizzard,
+    Flood,
     Volcano,
-    Hurricane,
-    Blizzard
+    Wildfire
 }
 
 public class TowerManager : MonoBehaviour
@@ -74,24 +74,24 @@ public class TowerManager : MonoBehaviour
             new TowerInfo(GetTowerPrefab(TowerType.Water), TowerType.Water, 0, 0, 0));
 
         // Tier 2 - single element
-        towerInfo.Add(TowerType.Tornado,
-            new TowerInfo(GetTowerPrefab(TowerType.Tornado), TowerType.Tornado, 0, 0, 0));
         towerInfo.Add(TowerType.Earthquake,
             new TowerInfo(GetTowerPrefab(TowerType.Earthquake), TowerType.Earthquake, 0, 0, 0));
         towerInfo.Add(TowerType.Flamethrower,
             new TowerInfo(GetTowerPrefab(TowerType.Flamethrower), TowerType.Flamethrower, 0, 0, 0));
+        towerInfo.Add(TowerType.Tornado,
+            new TowerInfo(GetTowerPrefab(TowerType.Tornado), TowerType.Tornado, 0, 0, 0));
         towerInfo.Add(TowerType.Tsunami,
             new TowerInfo(GetTowerPrefab(TowerType.Tsunami), TowerType.Tsunami, 0, 0, 0));
 
         // Tier 2 - double element
+        towerInfo.Add(TowerType.Flood,
+            new TowerInfo(GetTowerPrefab(TowerType.Flood), TowerType.Flood, 0, 0, 0));
+        towerInfo.Add(TowerType.Blizzard,
+            new TowerInfo(GetTowerPrefab(TowerType.Blizzard), TowerType.Blizzard, 0, 0, 0));
         towerInfo.Add(TowerType.Wildfire,
             new TowerInfo(GetTowerPrefab(TowerType.Wildfire), TowerType.Wildfire, 0, 0, 0));
         towerInfo.Add(TowerType.Volcano,
             new TowerInfo(GetTowerPrefab(TowerType.Volcano), TowerType.Volcano, 0, 0, 0));
-        towerInfo.Add(TowerType.Hurricane,
-            new TowerInfo(GetTowerPrefab(TowerType.Hurricane), TowerType.Hurricane, 0, 0, 0));
-        towerInfo.Add(TowerType.Blizzard,
-            new TowerInfo(GetTowerPrefab(TowerType.Blizzard), TowerType.Blizzard, 0, 0, 0));
 
         // === Add Upgrades ===
         // Tier 2 - single element 
@@ -102,13 +102,13 @@ public class TowerManager : MonoBehaviour
 
         // Tier 2 - double element
         towerInfo[TowerType.Air].AddUpgrade(towerInfo[TowerType.Wildfire], TowerType.Fire);
-        towerInfo[TowerType.Air].AddUpgrade(towerInfo[TowerType.Hurricane], TowerType.Water);
+        towerInfo[TowerType.Air].AddUpgrade(towerInfo[TowerType.Blizzard], TowerType.Water);
         towerInfo[TowerType.Earth].AddUpgrade(towerInfo[TowerType.Volcano], TowerType.Fire);
-        towerInfo[TowerType.Earth].AddUpgrade(towerInfo[TowerType.Blizzard], TowerType.Water);
+        towerInfo[TowerType.Earth].AddUpgrade(towerInfo[TowerType.Flood], TowerType.Water);
         towerInfo[TowerType.Fire].AddUpgrade(towerInfo[TowerType.Wildfire], TowerType.Air);
         towerInfo[TowerType.Fire].AddUpgrade(towerInfo[TowerType.Volcano], TowerType.Earth);
-        towerInfo[TowerType.Water].AddUpgrade(towerInfo[TowerType.Hurricane], TowerType.Air);
-        towerInfo[TowerType.Water].AddUpgrade(towerInfo[TowerType.Blizzard], TowerType.Earth);
+        towerInfo[TowerType.Water].AddUpgrade(towerInfo[TowerType.Blizzard], TowerType.Air);
+        towerInfo[TowerType.Water].AddUpgrade(towerInfo[TowerType.Flood], TowerType.Earth);
     }
 
     /// <summary>
