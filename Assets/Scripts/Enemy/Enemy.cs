@@ -38,12 +38,6 @@ public class Enemy : MonoBehaviour
 
 	private void OnCollisionEnter2D(Collision2D collision)
 	{
-		// Lose Health if it has collided with a bullet
-		if(collision.gameObject.tag == "Bullet")
-		{
-
-		}
-
 		// If it has reached the base (last checkpoint)
 		if(collision.gameObject == currentCheckpoint
 			&& currentCheckpoint.GetComponent<Checkpoint>().Next == null)
@@ -84,11 +78,11 @@ public class Enemy : MonoBehaviour
 		if(!CanMove())
 			return;
 
-		Vector2 direction = currentCheckpoint.transform.position - transform.position;
-		direction.Normalize();
-		direction *= moveSpeed * Time.deltaTime;
-
-		transform.position += new Vector3(direction.x, direction.y, 0.0f);
+		// Move the enemy closer to its current checkpoint
+		transform.position += EnemyManager.instance.CalculateMovement(
+			transform.position,
+			currentCheckpoint.transform.position,
+			moveSpeed);
 	}
 
 	/// <summary>

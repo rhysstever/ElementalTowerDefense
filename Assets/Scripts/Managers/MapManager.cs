@@ -131,8 +131,8 @@ public class MapManager : MonoBehaviour
 		Array.Clear(checkpoints, 0, checkpoints.Length);
 
 		// Clear all checkpoints and tiles
-		StaticHelpers.ClearParent(checkpointsParent);
-		StaticHelpers.ClearParent(tilesParent);
+		ClearParent(checkpointsParent);
+		ClearParent(tilesParent);
 	}
 
 	/// <summary>
@@ -196,5 +196,22 @@ public class MapManager : MonoBehaviour
 		return new Vector2(
 			column * xOffset,
 			row * -yOffset);
+	}
+
+	/// <summary>
+	/// Destroys all child objects of a parent
+	/// </summary>
+	/// <param name="parent">The parent game object</param>
+	public void ClearParent(GameObject parent)
+	{
+		for(int i = parent.transform.childCount - 1; i >= 0; i--)
+		{
+			// Create a reference to the child
+			Transform child = parent.transform.GetChild(i);
+			// Remove the parent object from the child
+			child.parent = null;
+			// Destroy the child object
+			GameObject.Destroy(child.gameObject);
+		}
 	}
 }

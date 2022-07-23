@@ -134,4 +134,22 @@ public class EnemyManager : MonoBehaviour
 		// Tell the wave an enemy was spawned
 		currentWave.EnemySpawned();
 	}
+
+	// === Helper Methods ===
+
+	/// <summary>
+	/// Calculates the next move from one position to another
+	/// </summary>
+	/// <param name="startingPos">The starting position</param>
+	/// <param name="targetPos">The goal position</param>
+	/// <param name="moveSpeed">The amount of movement that can be made</param>
+	/// <returns>The next movement (in 2D)</returns>
+	public Vector3 CalculateMovement(Vector3 startingPos, Vector3 targetPos, float moveSpeed)
+	{
+		Vector2 direction = targetPos - startingPos;
+		direction.Normalize();
+		direction *= moveSpeed * Time.deltaTime;
+
+		return direction;
+	}
 }
