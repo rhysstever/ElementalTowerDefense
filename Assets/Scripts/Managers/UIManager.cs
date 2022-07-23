@@ -34,8 +34,8 @@ public class UIManager : MonoBehaviour
 	private GameObject gameEndToMainButton;
 	[SerializeField]    // Player Stats Text
 	private GameObject healthText, moneyText;
-	[SerializeField]    // Selected Object parent panel
-	private GameObject selectedObjectPanel;
+	[SerializeField]    // Game parent panel
+	private GameObject selectedObjectPanel, towerPanel;
 
 	private Dictionary<MenuState, GameObject> menuStateUIParents;
 
@@ -49,7 +49,10 @@ public class UIManager : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-
+		// Toggle the tower panel with TAB
+		if(Input.GetKeyDown(KeyCode.Tab)
+			&& GameManager.instance.CurrentMenuState == MenuState.Game)
+			towerPanel.SetActive(!towerPanel.activeInHierarchy);
 	}
 
 	/// <summary>
@@ -92,6 +95,10 @@ public class UIManager : MonoBehaviour
 				continue;
 			else
 				menuStateUIParents[menuState].SetActive(menuState == newMenuState);
+
+			// Hide the tower panel initially
+			if(newMenuState == MenuState.Game)
+				towerPanel.SetActive(false);
 		}
 	}
 
