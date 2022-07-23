@@ -20,7 +20,9 @@ public class Selectable : MonoBehaviour
 
 	private void OnMouseDown()
 	{
-		Select();
+		// Can only be selected if the tower panel is closed
+		if(!UIManager.instance.IsBuyingTower)
+			Select();
 	}
 
 	/// <summary>
@@ -38,7 +40,9 @@ public class Selectable : MonoBehaviour
 		BuildManager.instance.Select(gameObject);
 	}
 
-	// Deselect this GameObject
+	/// <summary>
+	/// Deselect this GameObject
+	/// </summary>
 	public void Deselect()
 	{
 		isSelected = false;

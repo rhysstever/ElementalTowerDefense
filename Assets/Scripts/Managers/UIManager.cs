@@ -39,6 +39,9 @@ public class UIManager : MonoBehaviour
 
 	private Dictionary<MenuState, GameObject> menuStateUIParents;
 
+	// Properties
+	public bool IsBuyingTower { get { return towerPanel.activeInHierarchy; } }
+
 	// Start is called before the first frame update
 	void Start()
 	{
@@ -80,6 +83,13 @@ public class UIManager : MonoBehaviour
 		resumeButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.Game));
 		pauseToMainButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.MainMenu));
 		gameEndToMainButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.MainMenu));
+
+		// Set Tower Buy Button onClicks
+		foreach(Transform childTrans in towerPanel.transform.GetChild(1))
+		{
+			TowerType type = childTrans.GetComponent<Tower>().Type;
+			childTrans.GetComponent<Button>().onClick.AddListener(() => BuildManager.instance.Build(type));
+		}
 	}
 
 	/// <summary>
@@ -145,4 +155,9 @@ public class UIManager : MonoBehaviour
 		else
 			selectedObjectPanel.SetActive(false);
 	}
+	
+	/// <summary>
+	/// Closes the tower buying panel (such as after buying a tower)
+	/// </summary>
+	public void CloseTowerPanel() { towerPanel.SetActive(false); }
 }

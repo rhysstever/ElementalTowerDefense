@@ -30,9 +30,6 @@ public class BuildManager : MonoBehaviour
 	// Properties
 	public GameObject CurrentSelection { get { return currentSelection; } }
 
-	//TODO: Remove when build buttons are created
-	public TowerType currentType;
-
 	// Start is called before the first frame update
 	void Start()
 	{
@@ -42,10 +39,8 @@ public class BuildManager : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		//TODO: Remove when build/sell buttons are created
-		if(Input.GetKeyDown(KeyCode.E))
-			Build(currentType);
-		else if(Input.GetKeyDown(KeyCode.Q))
+		//TODO: Remove when sell button are created
+		if(Input.GetKeyDown(KeyCode.Q))
 			Sell();
 	}
 
@@ -129,6 +124,9 @@ public class BuildManager : MonoBehaviour
 		// Deactivate the tile and select the new tower
 		currentSelection.SetActive(false);
 		Select(newTower);
+
+		// Close the tower building panel
+		UIManager.instance.CloseTowerPanel();
 
 		// Update player stats UI
 		UIManager.instance.UpdatePlayerStatsText();
