@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TowerInfo
 {
+	// Fields
 	private Sprite sprite;
 	private TowerType type;
 	private int cost;
@@ -11,12 +12,13 @@ public class TowerInfo
 	private int attackSpeed;
 	private Dictionary<TowerInfo, TowerType> upgrades;
 
+	// Properties
 	public Sprite Sprite { get { return sprite; } }
 	public TowerType Type { get { return type; } }
 	public int Cost { get { return cost; } }
 	public int Damage { get { return damage; } }
-	public int AttackSpeed { get { return attackSpeed;} }
-	public Dictionary<TowerInfo,TowerType> Upgrades { get { return upgrades;} }
+	public int AttackSpeed { get { return attackSpeed; } }
+	public Dictionary<TowerInfo, TowerType> Upgrades { get { return upgrades; } }
 
 	public TowerInfo(Sprite sprite, TowerType type, int cost, int damage, int attackSpeed)
 	{

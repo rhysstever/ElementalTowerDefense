@@ -4,23 +4,24 @@ using UnityEngine;
 
 public class Checkpoint : MonoBehaviour
 {
-    private GameObject nextCheckpoint;
-    
-    public GameObject Next 
-    { 
-        get { return nextCheckpoint; } 
-        set { nextCheckpoint = value; }
-    }
+	private GameObject nextCheckpoint;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+	// Properties
+	public GameObject Next
+	{
+		get { return nextCheckpoint; }
+		set { nextCheckpoint = value; }
+	}
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	// Start is called before the first frame update
+	void Start()
+	{
+
+	}
+
+	// Update is called once per frame
+	void Update()
+	{
+
+	}
 }
