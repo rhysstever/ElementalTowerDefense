@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -48,16 +49,38 @@ public class TowerManager : MonoBehaviour
 
 	private Dictionary<TowerType, Sprite> towerSprites;
 	private Dictionary<TowerType, TowerInfo> towerInfo;
+	private TowerType selectedTypeInfo;
 
 	// Properties
 	public GameObject TowerPrefab { get { return towerPrefab; } }
 	public Dictionary<TowerType, TowerInfo> TowerInfo { get { return towerInfo; } }
+	public TowerType SelectedTypeInfo 
+	{ 
+		get { return selectedTypeInfo; }
+		set { selectedTypeInfo = value; }
+	}
 
 	// Start is called before the first frame update
 	void Start()
 	{
 		SetupTowerSpriteDictionary();
 		CreateTowerInfoDictionary();
+	}
+
+	/// <summary>
+	/// Link each tower type with the corresponding sprite, via dictionary
+	/// </summary>
+	private void SetupTowerSpriteDictionary()
+	{
+		towerSprites = new Dictionary<TowerType, Sprite>();
+		Sprite[] loadedSprites = Resources.LoadAll<Sprite>("Sprites/ElementIcons");
+
+		for(int i = 0; i < loadedSprites.Length; i++)
+		{
+			string towerName = loadedSprites[i].name.Substring(4);
+			TowerType type = (TowerType)System.Enum.Parse(typeof(TowerType), towerName);
+			towerSprites.Add(type, loadedSprites[i]);
+		}
 	}
 
 	/// <summary>
@@ -70,19 +93,35 @@ public class TowerManager : MonoBehaviour
 		// === Create TowerInfo objects for each element ===
 		// Tier 1
 		towerInfo.Add(TowerType.Air,
-			new TowerInfo(towerSprites[TowerType.Air], TowerType.Air, 20, 1, 50));
+			new TowerInfo(towerSprites[TowerType.Air], 20, 1, 0.33f, 8, false));
 		towerInfo.Add(TowerType.Earth,
-			new TowerInfo(towerSprites[TowerType.Earth], TowerType.Earth, 0, 0, 0));
+			new TowerInfo(towerSprites[TowerType.Earth], 20, 1, 0.33f, 8, true));
 		towerInfo.Add(TowerType.Fire,
-			new TowerInfo(towerSprites[TowerType.Fire], TowerType.Fire, 0, 0, 0));
+			new TowerInfo(towerSprites[TowerType.Fire], 20, 1, 0.33f, 8, false));
 		towerInfo.Add(TowerType.Water,
-			new TowerInfo(towerSprites[TowerType.Water], TowerType.Water, 0, 0, 0));
+			new TowerInfo(towerSprites[TowerType.Water], 20, 1, 0.33f, 8, false));
 
-		// TODO: Tier 2 - single element
+		// Tier 2 - single element
+		towerInfo.Add(TowerType.Earthquake,
+			new TowerInfo(towerSprites[TowerType.Earthquake], 20, 1, 0.33f, 8, true));
+		towerInfo.Add(TowerType.Flamethrower,
+			new TowerInfo(towerSprites[TowerType.Flamethrower], 20, 1, 0.33f, 8, false));
+		towerInfo.Add(TowerType.Tornado,
+			new TowerInfo(towerSprites[TowerType.Tornado], 20, 1, 0.33f, 8, false));
+		towerInfo.Add(TowerType.Tsunami,
+			new TowerInfo(towerSprites[TowerType.Tsunami], 20, 1, 0.33f, 8, false));
 
-		// TODO: Tier 2 - double element
+		// Tier 2 - double element
+		towerInfo.Add(TowerType.Blizzard,
+			new TowerInfo(towerSprites[TowerType.Blizzard], 20, 1, 0.33f, 8, false));
+		towerInfo.Add(TowerType.Flood,
+			new TowerInfo(towerSprites[TowerType.Flood], 20, 1, 0.33f, 8, true));
+		towerInfo.Add(TowerType.Volcano,
+			new TowerInfo(towerSprites[TowerType.Volcano], 20, 1, 0.33f, 8, true));
+		towerInfo.Add(TowerType.Wildfire,
+			new TowerInfo(towerSprites[TowerType.Wildfire], 20, 1, 0.33f, 8, false));
 
-		// TODO: Tower Upgrades
+		// TODO: Add Upgrades
 		//// === Add Upgrades ===
 		//// Tier 2 - single element 
 		//towerInfo[TowerType.Air].AddUpgrade(towerInfo[TowerType.Tornado], TowerType.Air);
@@ -99,18 +138,5 @@ public class TowerManager : MonoBehaviour
 		//towerInfo[TowerType.Fire].AddUpgrade(towerInfo[TowerType.Volcano], TowerType.Earth);
 		//towerInfo[TowerType.Water].AddUpgrade(towerInfo[TowerType.Blizzard], TowerType.Air);
 		//towerInfo[TowerType.Water].AddUpgrade(towerInfo[TowerType.Flood], TowerType.Earth);
-	}
-
-	private void SetupTowerSpriteDictionary()
-	{
-		towerSprites = new Dictionary<TowerType, Sprite>();
-		Sprite[] loadedSprites = Resources.LoadAll<Sprite>("Sprites/ElementIcons");
-
-		for(int i = 0; i < loadedSprites.Length; i++)
-		{
-			string towerName = loadedSprites[i].name.Substring(4);
-			TowerType type = (TowerType)System.Enum.Parse(typeof(TowerType), towerName);
-			towerSprites.Add(type, loadedSprites[i]);
-		}
 	}
 }

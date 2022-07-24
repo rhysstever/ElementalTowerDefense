@@ -28,6 +28,10 @@ public class Tower : MonoBehaviour
 
 	}
 
+	/// <summary>
+	/// Setup tower based on its type
+	/// </summary>
+	/// <param name="type">The tower's elemental type</param>
 	public void SetupTower(TowerType type)
 	{
 		// Set type and sprite

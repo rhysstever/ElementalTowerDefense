@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 5344546429170806268}
   - component: {fileID: 5344546429170806266}
   - component: {fileID: 5344546429170806267}
-  - component: {fileID: 8638943717940923363}
-  - component: {fileID: 791948988273848048}
+  - component: {fileID: 8870497514434212710}
+  - component: {fileID: 2626828161733788853}
   m_Layer: 5
   m_Name: spriteImagePrefab
   m_TagString: Untagged
@@ -78,20 +78,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &8638943717940923363
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5344546429170806269}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c9ddd6a7114026439ae7d08ef192905, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 0
---- !u!114 &791948988273848048
+--- !u!114 &8870497514434212710
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -135,3 +122,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2626828161733788853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5344546429170806269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c9ddd6a7114026439ae7d08ef192905, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0

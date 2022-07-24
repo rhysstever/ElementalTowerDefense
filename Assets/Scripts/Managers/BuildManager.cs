@@ -125,9 +125,6 @@ public class BuildManager : MonoBehaviour
 		currentSelection.SetActive(false);
 		Select(newTower);
 
-		// Close the tower building panel
-		UIManager.instance.CloseTowerPanel();
-
 		// Update player stats UI
 		UIManager.instance.UpdatePlayerStatsText();
 	}
