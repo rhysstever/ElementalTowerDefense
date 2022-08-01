@@ -28,13 +28,15 @@ public class UIManager : MonoBehaviour
 	private GameObject mainMenuParent, gameParent, pauseParent, gameEndParent;
 	[SerializeField]    // Main Menu buttons
 	private GameObject playButton, quitButton;
-	[SerializeField]    // Pause buttons
+	[SerializeField]    // Game Menu buttons
+	private GameObject pauseButton, towerButton, closeTowerPanelButton;
+	[SerializeField]    // Pause Menu buttons
 	private GameObject resumeButton, pauseToMainButton;
-	[SerializeField]    // Game End buttons
+	[SerializeField]    // Game End Menu buttons
 	private GameObject gameEndToMainButton;
 	[SerializeField]    // Player Stats Text
 	private GameObject healthText, moneyText;
-	[SerializeField]    // Game parent panel
+	[SerializeField]    // Game parent panels
 	private GameObject selectedObjectPanel, towerPanel, typeInfoPanel;
 
 	private Dictionary<MenuState, GameObject> menuStateUIParents;
@@ -52,10 +54,7 @@ public class UIManager : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		// Toggle the tower panel with TAB
-		if(Input.GetKeyDown(KeyCode.Tab)
-			&& GameManager.instance.CurrentMenuState == MenuState.Game)
-			ToggleTowerPanel();
+		
 	}
 
 	/// <summary>
@@ -80,14 +79,20 @@ public class UIManager : MonoBehaviour
 	{
 		playButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.Game));
 		quitButton.GetComponent<Button>().onClick.AddListener(() => Application.Quit());
+
+		towerButton.GetComponent<Button>().onClick.AddListener(() => SetTowerPanelActive(true));
+		closeTowerPanelButton.GetComponent<Button>().onClick.AddListener(() => SetTowerPanelActive(false));
+		pauseButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.Pause));
+
 		resumeButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.Game));
 		pauseToMainButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.MainMenu));
+
 		gameEndToMainButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.MainMenu));
 
 		// Set Tower Buy Button onClicks
-		foreach(Transform childTrans in towerPanel.transform.GetChild(2))
-			childTrans.GetComponent<Button>().onClick.AddListener(
-				() => UpdateSelectedTypeInfoUI(childTrans.GetComponent<Tower>().Type));
+		foreach(Transform towerButton in towerPanel.transform.GetChild(2))
+			towerButton.GetComponent<Button>().onClick.AddListener(
+				() => UpdateSelectedTypeInfoUI(towerButton.GetComponent<Tower>().Type));
 	}
 
 	/// <summary>
@@ -137,6 +142,7 @@ public class UIManager : MonoBehaviour
 			selectedObjectPanel.transform.GetChild(0).GetComponent<TMP_Text>().text = "Tile";
 			selectedObjectPanel.transform.GetChild(1).gameObject.SetActive(false);
 			selectedObjectPanel.transform.GetChild(2).gameObject.SetActive(false);
+			selectedObjectPanel.transform.GetChild(3).gameObject.SetActive(false);
 		}
 		else if(selectedGameObj.tag == "Tower")
 		{
@@ -149,6 +155,11 @@ public class UIManager : MonoBehaviour
 			selectedObjectPanel.transform.GetChild(1).GetComponent<TMP_Text>().text = "Damage: " + towerInfo.Damage;
 			selectedObjectPanel.transform.GetChild(2).gameObject.SetActive(true);
 			selectedObjectPanel.transform.GetChild(2).GetComponent<TMP_Text>().text = "Attack Speed: " + towerInfo.AttackSpeed;
+			selectedObjectPanel.transform.GetChild(3).gameObject.SetActive(true);
+			string rangeText = "Range: " + TowerManager.instance.TowerInfo[type].Range;
+			if(TowerManager.instance.TowerInfo[type].AOE)
+				rangeText += " AOE";
+			selectedObjectPanel.transform.GetChild(3).GetComponent<TMP_Text>().text = rangeText;
 		}
 		else
 			selectedObjectPanel.SetActive(false);
@@ -157,7 +168,7 @@ public class UIManager : MonoBehaviour
 	/// <summary>
 	/// Update the side panel with tower type info
 	/// </summary>
-	/// <param name="selectedType"></param>
+	/// <param name="selectedType">The selected tower type</param>
 	private void UpdateSelectedTypeInfoUI(TowerType selectedType)
 	{
 		// Update value in TowerManager
@@ -175,14 +186,15 @@ public class UIManager : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Toggles the tower info panel
+	/// Shows or hides the tower info panel
 	/// </summary>
-	private void ToggleTowerPanel()
+	/// <param name="isTowerPanelActive">Whether the tower info panel is visible or hidden</param>
+	private void SetTowerPanelActive(bool isTowerPanelActive)
 	{
-		towerPanel.SetActive(!towerPanel.activeInHierarchy);
+		towerPanel.SetActive(isTowerPanelActive);
 
 		// If the tower panel is visible, hide the side info panel
-		if(towerPanel.activeInHierarchy)
+		if(isTowerPanelActive)
 			typeInfoPanel.SetActive(false);
 	}
 }

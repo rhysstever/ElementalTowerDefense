@@ -39,8 +39,10 @@ public class BuildManager : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		//TODO: Remove when sell button are created
-		if(Input.GetKeyDown(KeyCode.Q))
+		//TODO: Remove when buy/sell buttons are created
+		if(Input.GetKeyDown(KeyCode.E))
+			Build(TowerManager.instance.SelectedTypeInfo);
+		else if(Input.GetKeyDown(KeyCode.Q))
 			Sell();
 	}
 
@@ -112,7 +114,7 @@ public class BuildManager : MonoBehaviour
 			currentSelection.transform.position,
 			Quaternion.identity,
 			towersParent.transform);
-		newTower.name = "tower" + (towersParent.transform.childCount - 1);
+		newTower.name = type + " Tower";
 
 		// Setup Tower
 		newTower.GetComponent<Tower>().SetupTower(type);

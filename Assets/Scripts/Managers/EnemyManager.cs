@@ -129,7 +129,7 @@ public class EnemyManager : MonoBehaviour
 		Vector2 startingPos = MapManager.instance.Checkpoints[0].transform.position;
 
 		GameObject newEnemy = Instantiate(enemyObject, startingPos, Quaternion.identity, enemyParent.transform);
-		newEnemy.name = "enemy" + (enemyParent.transform.childCount - 1);
+		newEnemy.name = "enemy" + (currentWave.EnemiesSpawned + 1);
 
 		// Tell the wave an enemy was spawned
 		currentWave.EnemySpawned();

@@ -48,6 +48,7 @@ public class TowerManager : MonoBehaviour
 	private GameObject towerPrefab;
 
 	private Dictionary<TowerType, Sprite> towerSprites;
+	private Dictionary<TowerType, Sprite> bulletSprites;
 	private Dictionary<TowerType, TowerInfo> towerInfo;
 	private TowerType selectedTypeInfo;
 
@@ -63,23 +64,35 @@ public class TowerManager : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		SetupTowerSpriteDictionary();
+		LoadSprites();
 		CreateTowerInfoDictionary();
 	}
 
 	/// <summary>
 	/// Link each tower type with the corresponding sprite, via dictionary
 	/// </summary>
-	private void SetupTowerSpriteDictionary()
+	private void LoadSprites()
 	{
+		// Load Tower Sprites
 		towerSprites = new Dictionary<TowerType, Sprite>();
 		Sprite[] loadedSprites = Resources.LoadAll<Sprite>("Sprites/ElementIcons");
 
 		for(int i = 0; i < loadedSprites.Length; i++)
 		{
-			string towerName = loadedSprites[i].name.Substring(4);
+			string towerName = loadedSprites[i].name.Substring("icon".Length);
 			TowerType type = (TowerType)System.Enum.Parse(typeof(TowerType), towerName);
 			towerSprites.Add(type, loadedSprites[i]);
+		}
+
+		// Load Bullet Sprites
+		bulletSprites = new Dictionary<TowerType, Sprite>();
+		Sprite[] loadedBulletSprites = Resources.LoadAll<Sprite>("Sprites/Bullets");
+
+		for(int i = 0; i < loadedBulletSprites.Length; i++)
+		{
+			string bulletElement = loadedBulletSprites[i].name.Substring("bullet".Length);
+			TowerType type = (TowerType)System.Enum.Parse(typeof(TowerType), bulletElement);
+			bulletSprites.Add(type, loadedBulletSprites[i]);
 		}
 	}
 
@@ -93,33 +106,33 @@ public class TowerManager : MonoBehaviour
 		// === Create TowerInfo objects for each element ===
 		// Tier 1
 		towerInfo.Add(TowerType.Air,
-			new TowerInfo(towerSprites[TowerType.Air], 20, 1, 0.33f, 8, false));
+			new TowerInfo(towerSprites[TowerType.Air], bulletSprites[TowerType.Air], 20, 1, 0.33f, 8, false));
 		towerInfo.Add(TowerType.Earth,
-			new TowerInfo(towerSprites[TowerType.Earth], 20, 1, 0.33f, 8, true));
+			new TowerInfo(towerSprites[TowerType.Earth], bulletSprites[TowerType.Earth], 20, 1, 0.33f, 8, true));
 		towerInfo.Add(TowerType.Fire,
-			new TowerInfo(towerSprites[TowerType.Fire], 20, 1, 0.33f, 8, false));
+			new TowerInfo(towerSprites[TowerType.Fire], bulletSprites[TowerType.Fire], 20, 1, 0.33f, 8, false));
 		towerInfo.Add(TowerType.Water,
-			new TowerInfo(towerSprites[TowerType.Water], 20, 1, 0.33f, 8, false));
+			new TowerInfo(towerSprites[TowerType.Water], bulletSprites[TowerType.Water], 20, 1, 0.33f, 8, false));
 
 		// Tier 2 - single element
 		towerInfo.Add(TowerType.Earthquake,
-			new TowerInfo(towerSprites[TowerType.Earthquake], 20, 1, 0.33f, 8, true));
+			new TowerInfo(towerSprites[TowerType.Earthquake], bulletSprites[TowerType.Earth], 20, 1, 0.33f, 8, true));
 		towerInfo.Add(TowerType.Flamethrower,
-			new TowerInfo(towerSprites[TowerType.Flamethrower], 20, 1, 0.33f, 8, false));
+			new TowerInfo(towerSprites[TowerType.Flamethrower], bulletSprites[TowerType.Fire], 20, 1, 0.33f, 8, false));
 		towerInfo.Add(TowerType.Tornado,
-			new TowerInfo(towerSprites[TowerType.Tornado], 20, 1, 0.33f, 8, false));
+			new TowerInfo(towerSprites[TowerType.Tornado], bulletSprites[TowerType.Air], 20, 1, 0.33f, 8, false));
 		towerInfo.Add(TowerType.Tsunami,
-			new TowerInfo(towerSprites[TowerType.Tsunami], 20, 1, 0.33f, 8, false));
+			new TowerInfo(towerSprites[TowerType.Tsunami], bulletSprites[TowerType.Water], 20, 1, 0.33f, 8, false));
 
 		// Tier 2 - double element
 		towerInfo.Add(TowerType.Blizzard,
-			new TowerInfo(towerSprites[TowerType.Blizzard], 20, 1, 0.33f, 8, false));
+			new TowerInfo(towerSprites[TowerType.Blizzard], bulletSprites[TowerType.Air], 20, 1, 0.33f, 8, false));
 		towerInfo.Add(TowerType.Flood,
-			new TowerInfo(towerSprites[TowerType.Flood], 20, 1, 0.33f, 8, true));
+			new TowerInfo(towerSprites[TowerType.Flood], bulletSprites[TowerType.Water], 20, 1, 0.33f, 8, true));
 		towerInfo.Add(TowerType.Volcano,
-			new TowerInfo(towerSprites[TowerType.Volcano], 20, 1, 0.33f, 8, true));
+			new TowerInfo(towerSprites[TowerType.Volcano], bulletSprites[TowerType.Earth], 20, 1, 0.33f, 8, true));
 		towerInfo.Add(TowerType.Wildfire,
-			new TowerInfo(towerSprites[TowerType.Wildfire], 20, 1, 0.33f, 8, false));
+			new TowerInfo(towerSprites[TowerType.Wildfire], bulletSprites[TowerType.Fire], 20, 1, 0.33f, 8, false));
 
 		// TODO: Add Upgrades
 		//// === Add Upgrades ===

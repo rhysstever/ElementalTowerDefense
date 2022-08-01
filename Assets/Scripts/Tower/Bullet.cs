@@ -15,7 +15,7 @@ public class Bullet : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-
+		moveSpeed = 8.0f;
 	}
 
 	void FixedUpdate()
@@ -38,29 +38,26 @@ public class Bullet : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Set the bullet's originating tower
+	/// Sets the bullet's starting and end "points"
 	/// </summary>
-	/// <param name="tower">The tower game object the bullet was fired from</param>
-	public void SetTower(GameObject tower)
+	/// <param name="tower">The tower the bullet is being shot from</param>
+	/// <param name="enemy">The bullet's target</param>
+	public void SetEndpoints(GameObject tower, GameObject enemy)
 	{
-		if(tower.tag != "Tower")
-			return;
+		if(tower.tag == "Tower")
+		{
+			this.tower = tower;
+			TowerInfo towerInfo = TowerManager.instance.TowerInfo[tower.GetComponent<Tower>().Type];
 
-		this.tower = tower;
-		// Calculate the damage of the bullet based on the tower
-		damage = TowerManager.instance.TowerInfo[tower.GetComponent<Tower>().Type].Damage;
-	}
+			// Set the sprite of the bullet
+			GetComponent<SpriteRenderer>().sprite = towerInfo.BulletSprite;
 
-	/// <summary>
-	/// Set the bullet's target
-	/// </summary>
-	/// <param name="enemy">An enemy game object</param>
-	public void SetTargetEnemy(GameObject enemy)
-	{
-		if(tower.tag != "Enemy")
-			return;
+			// Calculate the damage of the bullet based on the tower
+			damage = towerInfo.Damage;
+		}
 
-		targetEnemy = enemy;
+		if(enemy.tag == "Enemy")
+			targetEnemy = enemy;
 	}
 
 	/// <summary>
@@ -70,7 +67,10 @@ public class Bullet : MonoBehaviour
 	{
 		// Destroy the bullet if there is no target
 		if(targetEnemy == null)
+		{
 			Destroy(gameObject);
+			return;
+		}
 
 		// Move the bullet closer to the target enemy
 		transform.position += EnemyManager.instance.CalculateMovement(
