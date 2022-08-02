@@ -134,22 +134,21 @@ public class TowerManager : MonoBehaviour
 		towerInfo.Add(TowerType.Wildfire,
 			new TowerInfo(towerSprites[TowerType.Wildfire], bulletSprites[TowerType.Fire], 20, 1, 0.33f, 8, false));
 
-		// TODO: Add Upgrades
-		//// === Add Upgrades ===
-		//// Tier 2 - single element 
-		//towerInfo[TowerType.Air].AddUpgrade(towerInfo[TowerType.Tornado], TowerType.Air);
-		//towerInfo[TowerType.Earth].AddUpgrade(towerInfo[TowerType.Earthquake], TowerType.Earth);
-		//towerInfo[TowerType.Fire].AddUpgrade(towerInfo[TowerType.Flamethrower], TowerType.Fire);
-		//towerInfo[TowerType.Water].AddUpgrade(towerInfo[TowerType.Tsunami], TowerType.Water);
+		// === Add Upgrades ===
+		// Tier 2 - single element 
+		towerInfo[TowerType.Air].AddUpgrade(TowerType.Air, TowerType.Tornado);
+		towerInfo[TowerType.Earth].AddUpgrade(TowerType.Earth, TowerType.Earthquake);
+		towerInfo[TowerType.Fire].AddUpgrade(TowerType.Fire, TowerType.Flamethrower);
+		towerInfo[TowerType.Water].AddUpgrade(TowerType.Water, TowerType.Tsunami);
 
-		//// Tier 2 - double element
-		//towerInfo[TowerType.Air].AddUpgrade(towerInfo[TowerType.Wildfire], TowerType.Fire);
-		//towerInfo[TowerType.Air].AddUpgrade(towerInfo[TowerType.Blizzard], TowerType.Water);
-		//towerInfo[TowerType.Earth].AddUpgrade(towerInfo[TowerType.Volcano], TowerType.Fire);
-		//towerInfo[TowerType.Earth].AddUpgrade(towerInfo[TowerType.Flood], TowerType.Water);
-		//towerInfo[TowerType.Fire].AddUpgrade(towerInfo[TowerType.Wildfire], TowerType.Air);
-		//towerInfo[TowerType.Fire].AddUpgrade(towerInfo[TowerType.Volcano], TowerType.Earth);
-		//towerInfo[TowerType.Water].AddUpgrade(towerInfo[TowerType.Blizzard], TowerType.Air);
-		//towerInfo[TowerType.Water].AddUpgrade(towerInfo[TowerType.Flood], TowerType.Earth);
+		// Tier 2 - double element
+		towerInfo[TowerType.Air].AddUpgrade(TowerType.Fire, TowerType.Wildfire);
+		towerInfo[TowerType.Air].AddUpgrade(TowerType.Water, TowerType.Blizzard);
+		towerInfo[TowerType.Earth].AddUpgrade(TowerType.Fire, TowerType.Volcano);
+		towerInfo[TowerType.Earth].AddUpgrade(TowerType.Water, TowerType.Flood);
+		towerInfo[TowerType.Fire].AddUpgrade(TowerType.Air, TowerType.Wildfire);
+		towerInfo[TowerType.Fire].AddUpgrade(TowerType.Earth, TowerType.Volcano);
+		towerInfo[TowerType.Water].AddUpgrade(TowerType.Air, TowerType.Blizzard);
+		towerInfo[TowerType.Water].AddUpgrade(TowerType.Earth, TowerType.Flood);
 	}
 }

@@ -28,33 +28,19 @@ public class Selectable : MonoBehaviour
 		if(GameManager.instance.CurrentMenuState == MenuState.Game
 			&& !UIManager.instance.IsInfoPanelOpen
 			&& !EventSystem.current.IsPointerOverGameObject())
-			Select();
+			BuildManager.instance.Select(gameObject);
 	}
 
 	/// <summary>
-	/// Select this GameObject
+	/// Select or deselect this GameObject
 	/// </summary>
-	public void Select()
+	/// <param name="select">Whether the gameobject is being selected or deselected</param>
+	public void Select(bool select)
 	{
-		isSelected = true;
+		isSelected = select;
 
 		// If this is a tile, change its color to yellow
 		if(gameObject.tag == "Tile")
-			GetComponent<SpriteRenderer>().color = Color.yellow;
-
-		// Tell the Build Manager to select this gameobject
-		BuildManager.instance.Select(gameObject);
-	}
-
-	/// <summary>
-	/// Deselect this GameObject
-	/// </summary>
-	public void Deselect()
-	{
-		isSelected = false;
-
-		// If this is a tile, change its color back to gray
-		if(gameObject.tag == "Tile")
-			GetComponent<SpriteRenderer>().color = Color.gray;
+			GetComponent<SpriteRenderer>().color = select ? Color.yellow : new Color(0.6f, 0.6f, 0.6f);
 	}
 }
