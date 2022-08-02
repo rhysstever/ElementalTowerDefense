@@ -18,11 +18,6 @@ public class Enemy : MonoBehaviour
 	void Start()
 	{
 		currentCheckpoint = MapManager.instance.Checkpoints[1];
-
-		health = 10;
-		damage = 1;
-		goldWorth = 5;
-		moveSpeed = 2.0f;
 	}
 
 	// Update is called once per frame
@@ -47,14 +42,14 @@ public class Enemy : MonoBehaviour
 	/// <summary>
 	/// Sets enemy stats
 	/// </summary>
-	/// <param name="health">How much damage the enemy can take</param>
-	/// <param name="damage">How many damage the base will take if the enemy reaches it</param>
-	/// <param name="moveSpeed">How fast the enemy can move</param>
-	public void SetStats(int health, int damage, float moveSpeed)
+	/// <param name="enemyInfo">Stats for the enemy</param>
+	public void SetStats(EnemyInfo enemyInfo)
 	{
-		this.health = health;
-		this.damage = damage;
-		this.moveSpeed = moveSpeed;
+		enemyName = enemyInfo.EnemyName;
+		health = enemyInfo.Health;
+		damage = enemyInfo.Damage;
+		goldWorth = enemyInfo.GoldWorth;
+		moveSpeed = enemyInfo.MoveSpeed;
 	}
 
 	/// <summary>
@@ -97,7 +92,7 @@ public class Enemy : MonoBehaviour
 		else
 		{
 			// Damage the base
-			GameManager.instance.health -= damage;
+			GameManager.instance.UpdateHealth(-damage);
 
 			// Delete the enenmy and update the wave
 			EnemyManager.instance.CurrentWave.EnemyRemoved();
@@ -115,7 +110,7 @@ public class Enemy : MonoBehaviour
 
 		if(health <= 0)
 		{
-			GameManager.instance.money += goldWorth;
+			GameManager.instance.UpdateMoney(goldWorth);
 
 			// Delete the enenmy and update the wave
 			EnemyManager.instance.CurrentWave.EnemyRemoved();

@@ -24,25 +24,30 @@ public class UIManager : MonoBehaviour
 	}
 	#endregion
 
-	[SerializeField]    // Parent objects
+	[SerializeField]    // Parent Objects
 	private GameObject mainMenuParent, gameParent, pauseParent, gameEndParent;
-	[SerializeField]    // Main Menu buttons
+
+	[SerializeField]    // Main Menu Buttons
 	private GameObject playButton, quitButton;
-	[SerializeField]    // Game Menu buttons
-	private GameObject pauseButton, towerButton, closeTowerPanelButton;
-	[SerializeField]    // Pause Menu buttons
+	[SerializeField]    // Pause Menu Buttons
 	private GameObject resumeButton, pauseToMainButton;
-	[SerializeField]    // Game End Menu buttons
+	[SerializeField]    // Game End Menu Buttons
 	private GameObject gameEndToMainButton;
-	[SerializeField]    // Player Stats Text
-	private GameObject healthText, moneyText;
-	[SerializeField]    // Game parent panels
-	private GameObject selectedObjectPanel, towerPanel, typeInfoPanel;
+	
+	[SerializeField]    // Game Menu Text
+	private GameObject healthText, moneyText, waveText;
+	[SerializeField]    // Game Menu Panels
+	private GameObject towerBuildPanel, selectedObjectPanel, typeInfoPanel, typeInfoSubPanel;
+	[SerializeField]    // Game Menu buttons
+	private GameObject openTowerPanelButton, closeTowerPanelButton;
+
+	[SerializeField]
+	private GameObject gameEndHeaderText;
 
 	private Dictionary<MenuState, GameObject> menuStateUIParents;
 
 	// Properties
-	public bool IsBuyingTower { get { return towerPanel.activeInHierarchy; } }
+	public bool IsInfoPanelOpen { get { return typeInfoPanel.activeInHierarchy; } }
 
 	// Start is called before the first frame update
 	void Start()
@@ -77,22 +82,27 @@ public class UIManager : MonoBehaviour
 	/// </summary>
 	private void SetupUI()
 	{
+		// Menu Buttons
 		playButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.Game));
 		quitButton.GetComponent<Button>().onClick.AddListener(() => Application.Quit());
-
-		towerButton.GetComponent<Button>().onClick.AddListener(() => SetTowerPanelActive(true));
-		closeTowerPanelButton.GetComponent<Button>().onClick.AddListener(() => SetTowerPanelActive(false));
-		pauseButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.Pause));
-
 		resumeButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.Game));
 		pauseToMainButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.MainMenu));
-
 		gameEndToMainButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.MainMenu));
 
+		// Tower Info Panel Open/Close Buttons
+		openTowerPanelButton.GetComponent<Button>().onClick.AddListener(() => SetTowerPanelActive(true));
+		closeTowerPanelButton.GetComponent<Button>().onClick.AddListener(() => SetTowerPanelActive(false));
+
 		// Set Tower Buy Button onClicks
-		foreach(Transform towerButton in towerPanel.transform.GetChild(2))
-			towerButton.GetComponent<Button>().onClick.AddListener(
-				() => UpdateSelectedTypeInfoUI(towerButton.GetComponent<Tower>().Type));
+		foreach(Transform buildTowerButton in towerBuildPanel.transform)
+			if(buildTowerButton.GetComponent<Tower>() != null)
+				buildTowerButton.GetComponent<Button>().onClick.AddListener(
+					() => BuildManager.instance.Build(buildTowerButton.GetComponent<Tower>().Type));
+
+		// Set Tower Info Button onClicks
+		foreach(Transform towerInfoButton in typeInfoPanel.transform.GetChild(2))
+			towerInfoButton.GetComponent<Button>().onClick.AddListener(
+				() => UpdateSelectedTypeInfoUI(towerInfoButton.GetComponent<Tower>().Type));
 	}
 
 	/// <summary>
@@ -111,20 +121,32 @@ public class UIManager : MonoBehaviour
 
 			// Hide the tower panel initially
 			if(newMenuState == MenuState.Game)
-				towerPanel.SetActive(false);
+				typeInfoPanel.SetActive(false);
 		}
 	}
 
 	/// <summary>
-	/// Updates the text for player stats
+	/// Updates text about the player's health
 	/// </summary>
-	public void UpdatePlayerStatsText()
-	{
-		int health = GameManager.instance.health;
-		int money = GameManager.instance.money;
+	public void UpdatePlayerHealthText() 
+	{ 
+		healthText.GetComponent<TMP_Text>().text = "Health: " + GameManager.instance.Health; 
+	}
 
-		healthText.GetComponent<TMP_Text>().text = "Health: " + health;
-		moneyText.GetComponent<TMP_Text>().text = "Money: " + money;
+	/// <summary>
+	/// Updates text about the player's money
+	/// </summary>
+	public void UpdatePlayerMoneyText()
+	{
+		moneyText.GetComponent<TMP_Text>().text = "Money: " + GameManager.instance.Money;
+	}
+
+	/// <summary>
+	/// Updates text about the wave
+	/// </summary>
+	public void UpdateWaveText()
+	{
+		waveText.GetComponent<TMP_Text>().text = EnemyManager.instance.GetWaveText();
 	}
 
 	/// <summary>
@@ -174,15 +196,15 @@ public class UIManager : MonoBehaviour
 		// Update value in TowerManager
 		TowerManager.instance.SelectedTypeInfo = selectedType;
 
-		typeInfoPanel.SetActive(true);
-		typeInfoPanel.transform.GetChild(0).GetComponent<TMP_Text>().text = selectedType + " Tower";
-		typeInfoPanel.transform.GetChild(1).GetComponent<TMP_Text>().text = "Cost: " + TowerManager.instance.TowerInfo[selectedType].Cost;
-		typeInfoPanel.transform.GetChild(2).GetComponent<TMP_Text>().text = "Damage: " + TowerManager.instance.TowerInfo[selectedType].Damage;
-		typeInfoPanel.transform.GetChild(3).GetComponent<TMP_Text>().text = "Attack Speed: " + TowerManager.instance.TowerInfo[selectedType].AttackSpeed;
+		typeInfoSubPanel.SetActive(true);
+		typeInfoSubPanel.transform.GetChild(0).GetComponent<TMP_Text>().text = selectedType + " Tower";
+		typeInfoSubPanel.transform.GetChild(1).GetComponent<TMP_Text>().text = "Cost: " + TowerManager.instance.TowerInfo[selectedType].Cost;
+		typeInfoSubPanel.transform.GetChild(2).GetComponent<TMP_Text>().text = "Damage: " + TowerManager.instance.TowerInfo[selectedType].Damage;
+		typeInfoSubPanel.transform.GetChild(3).GetComponent<TMP_Text>().text = "Attack Speed: " + TowerManager.instance.TowerInfo[selectedType].AttackSpeed;
 		string rangeText = "Range: " + TowerManager.instance.TowerInfo[selectedType].Range;
 		if(TowerManager.instance.TowerInfo[selectedType].AOE)
 			rangeText += " AOE";
-		typeInfoPanel.transform.GetChild(4).GetComponent<TMP_Text>().text = rangeText;
+		typeInfoSubPanel.transform.GetChild(4).GetComponent<TMP_Text>().text = rangeText;
 	}
 
 	/// <summary>
@@ -191,10 +213,19 @@ public class UIManager : MonoBehaviour
 	/// <param name="isTowerPanelActive">Whether the tower info panel is visible or hidden</param>
 	private void SetTowerPanelActive(bool isTowerPanelActive)
 	{
-		towerPanel.SetActive(isTowerPanelActive);
+		typeInfoPanel.SetActive(isTowerPanelActive);
 
 		// If the tower panel is visible, hide the side info panel
 		if(isTowerPanelActive)
-			typeInfoPanel.SetActive(false);
+			typeInfoSubPanel.SetActive(false);
+	}
+
+	/// <summary>
+	/// Updates header text on the game end panel
+	/// </summary>
+	/// <param name="hasWon"></param>
+	public void UpdateGameEndText(bool hasWon)
+	{
+		gameEndHeaderText.GetComponent<TMP_Text>().text = hasWon ? "Game Won" : "Game Over";
 	}
 }

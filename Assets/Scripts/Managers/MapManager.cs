@@ -23,6 +23,8 @@ public class MapManager : MonoBehaviour
 	}
 	#endregion
 
+	[SerializeField]
+	private GameObject map;
 	[SerializeField]    // Object parents
 	private GameObject checkpointsParent, tilesParent;
 	[SerializeField]    // Map Prefabs
@@ -130,9 +132,9 @@ public class MapManager : MonoBehaviour
 	{
 		Array.Clear(checkpoints, 0, checkpoints.Length);
 
-		// Clear all checkpoints and tiles
-		ClearParent(checkpointsParent);
-		ClearParent(tilesParent);
+		// Loop through all children of the map and clear them
+		foreach(Transform childTrans in map.transform)
+			ClearParent(childTrans.gameObject);
 	}
 
 	/// <summary>

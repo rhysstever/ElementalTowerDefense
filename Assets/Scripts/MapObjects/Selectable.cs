@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Selectable : MonoBehaviour
 {
@@ -20,8 +21,13 @@ public class Selectable : MonoBehaviour
 
 	private void OnMouseDown()
 	{
-		// Can only be selected if the tower panel is closed
-		if(!UIManager.instance.IsBuyingTower)
+		// Only select the game object if:
+		// 1) It is the Game menu state
+		// 2) The tower info panel is closed
+		// 3) The mouse is not over UI elements
+		if(GameManager.instance.CurrentMenuState == MenuState.Game
+			&& !UIManager.instance.IsInfoPanelOpen
+			&& !EventSystem.current.IsPointerOverGameObject())
 			Select();
 	}
 

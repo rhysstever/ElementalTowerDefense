@@ -39,11 +39,14 @@ public class BuildManager : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		//TODO: Remove when buy/sell buttons are created
-		if(Input.GetKeyDown(KeyCode.E))
-			Build(TowerManager.instance.SelectedTypeInfo);
-		else if(Input.GetKeyDown(KeyCode.Q))
+		//TODO: Remove when sell button are created
+		if(Input.GetKeyDown(KeyCode.Q))
 			Sell();
+	}
+
+	public void ClearTower()
+	{
+
 	}
 
 	/// <summary>
@@ -87,7 +90,7 @@ public class BuildManager : MonoBehaviour
 
 		// Check that the player has enough money to afford the tower
 		int cost = TowerManager.instance.TowerInfo[type].Cost;
-		if(GameManager.instance.money < cost)
+		if(GameManager.instance.Money < cost)
 		{
 			Debug.Log("You do not have enough money!");
 			return false;
@@ -106,7 +109,7 @@ public class BuildManager : MonoBehaviour
 			return;
 
 		// Remove the money from the player
-		GameManager.instance.money -= TowerManager.instance.TowerInfo[type].Cost;
+		GameManager.instance.UpdateMoney(-TowerManager.instance.TowerInfo[type].Cost);
 
 		// Create the tower 
 		GameObject newTower = Instantiate(
@@ -126,9 +129,6 @@ public class BuildManager : MonoBehaviour
 		// Deactivate the tile and select the new tower
 		currentSelection.SetActive(false);
 		Select(newTower);
-
-		// Update player stats UI
-		UIManager.instance.UpdatePlayerStatsText();
 	}
 
 	/// <summary>
@@ -146,7 +146,7 @@ public class BuildManager : MonoBehaviour
 
 		// Give the player 1/2 the cost of the tower
 		int cost = TowerManager.instance.TowerInfo[currentSelection.GetComponent<Tower>().Type].Cost;
-		GameManager.instance.money += cost / 2;
+		GameManager.instance.UpdateMoney(cost / 2);
 
 		// Select the tile under the tower
 		Select(currentSelection.GetComponent<Tower>().Tile);
@@ -155,8 +155,5 @@ public class BuildManager : MonoBehaviour
 		// Destroy the tower and unlink it from the tile
 		Destroy(currentSelection.GetComponent<Tile>().Tower);
 		currentSelection.GetComponent<Tile>().Tower = null;
-
-		// Update player stats UI
-		UIManager.instance.UpdatePlayerStatsText();
 	}
 }

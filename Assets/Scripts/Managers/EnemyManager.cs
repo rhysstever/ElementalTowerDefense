@@ -44,7 +44,8 @@ public class EnemyManager : MonoBehaviour
 		if(Input.GetKeyDown(KeyCode.Space))
 			SpawnWave(currentWave);
 
-		if(currentWave != null
+		if(GameManager.instance.CurrentMenuState == MenuState.Game
+			&& currentWave != null
 			&& currentWave.HasCleared)
 		{
 			// Set the current wave to the next wave
@@ -77,7 +78,7 @@ public class EnemyManager : MonoBehaviour
 			{
 				// Resets timer and spawns an enemy
 				spawnTimer = 0.0f;
-				SpawnEnemy(currentWave.EnemyPrefab);
+				SpawnEnemy();
 			}
 		}
 	}
@@ -87,20 +88,20 @@ public class EnemyManager : MonoBehaviour
 	/// </summary>
 	public void SetupEnemyWaves()
 	{
-		currentWave = CreateWaves();
+		// Create Enemies
+		EnemyInfo basicEnemy = new EnemyInfo(
+			"Regular Red", 10, 1, 5, 2.0f);
+
+		// Create Waves
+		Wave wave2 = new Wave("Wave 2", basicEnemy, 8, 1.0f);
+		Wave wave1 = new Wave("Wave 1", basicEnemy, 5, 1.0f, wave2);
+
+		// Set first wave
+		currentWave = wave1;
 		spawnTimer = currentWave.SpawnDelay;     // Allows the first enemy to spawn immediately
-	}
 
-	/// <summary>
-	/// Creates each wave
-	/// </summary>
-	/// <returns>The first wave</returns>
-	private Wave CreateWaves()
-	{
-		Wave wave2 = new Wave("Wave 2", enemyPrefab, 8, 1.0f);
-		Wave wave1 = new Wave("Wave 1", enemyPrefab, 5, 1.0f, wave2);
-
-		return wave1;
+		// Update UI
+		UIManager.instance.UpdateWaveText();
 	}
 
 	/// <summary>
@@ -122,17 +123,38 @@ public class EnemyManager : MonoBehaviour
 	/// <summary>
 	/// Creates an enemy in the scene
 	/// </summary>
-	/// <param name="enemyObject">The prefab of the enemy being spawned</param>
-	private void SpawnEnemy(GameObject enemyObject)
+	private void SpawnEnemy()
 	{
 		// Make the enemy spawn at the first checkpoint
 		Vector2 startingPos = MapManager.instance.Checkpoints[0].transform.position;
 
-		GameObject newEnemy = Instantiate(enemyObject, startingPos, Quaternion.identity, enemyParent.transform);
+		// Create the enemy in the scene
+		GameObject newEnemy = Instantiate(enemyPrefab, startingPos, Quaternion.identity, enemyParent.transform);
+		
+		// Set the game object's name in the scene and its stats
 		newEnemy.name = "enemy" + (currentWave.EnemiesSpawned + 1);
+		newEnemy.GetComponent<Enemy>().SetStats(currentWave.EnemyInfo);
 
 		// Tell the wave an enemy was spawned
 		currentWave.EnemySpawned();
+	}
+
+	/// <summary>
+	/// Displays the wave text information
+	/// </summary>
+	/// <returns>A string description of the wave</returns>
+	public string GetWaveText()
+	{
+		// Return nothing if there is no current wave
+		if(currentWave == null)
+			return "";
+
+		// If the wave is cleared, display the next wave's info
+		if(currentWave.HasCleared
+			&& currentWave.NextWave != null)
+			return currentWave.NextWave.Description();
+		else 
+			return currentWave.Description();
 	}
 
 	// === Helper Methods ===

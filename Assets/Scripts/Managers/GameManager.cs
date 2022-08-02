@@ -30,12 +30,14 @@ public class GameManager : MonoBehaviour
 	}
 	#endregion
 
-	public int health;
-	public int money;
+	private int health;
+	private int money;
 
 	private MenuState currentMenuState;
 
 	// Properties
+	public int Health { get { return health; } }
+	public int Money { get { return money; } }
 	public MenuState CurrentMenuState { get { return currentMenuState; } }
 
 	// Start is called before the first frame update
@@ -56,9 +58,6 @@ public class GameManager : MonoBehaviour
 				// ESC key pauses the game
 				if(Input.GetKeyDown(KeyCode.Escape))
 					ChangeMenuState(MenuState.Pause);
-				// Changes the menu state to Game Over if the player loses all health
-				if(health <= 0)
-					ChangeMenuState(MenuState.GameEnd);
 				break;
 			case MenuState.Pause:
 				// ESC key unpauses the game
@@ -81,21 +80,22 @@ public class GameManager : MonoBehaviour
 			case MenuState.MainMenu:
 				health = 100;
 				money = 100;
+				UIManager.instance.UpdatePlayerHealthText();
+				UIManager.instance.UpdatePlayerMoneyText();
 				MapManager.instance.ClearMap();
 				break;
 			case MenuState.Game:
 				EnemyManager.instance.SetupEnemyWaves();
+				BuildManager.instance.Select(null); // Set initial selection
 
 				// If the player is going from the Main Menu to the Game state
 				if(currentMenuState == MenuState.MainMenu)
-				{
 					MapManager.instance.SpawnCurrentMap();  // Create the map
-					BuildManager.instance.Select(null); // Set initial selection
-				}
 				break;
 			case MenuState.Pause:
 				break;
 			case MenuState.GameEnd:
+				UIManager.instance.UpdateGameEndText(health > 0);
 				break;
 		}
 
@@ -112,5 +112,33 @@ public class GameManager : MonoBehaviour
 	public void EndGame(bool hasPlayerWon)
 	{
 		ChangeMenuState(MenuState.GameEnd);
+	}
+
+	/// <summary>
+	/// Update the player's health
+	/// </summary>
+	/// <param name="amount">The amount of health given/taken away from the player</param>
+	public void UpdateHealth(int amount)
+	{
+		health += amount;
+
+		// Changes the menu state to Game Over if the player loses all health
+		if(health <= 0)
+			ChangeMenuState(MenuState.GameEnd);
+
+		// Update UI
+		UIManager.instance.UpdatePlayerHealthText();
+	}
+
+	/// <summary>
+	/// Update the player's money
+	/// </summary>
+	/// <param name="amount">The amount of money given/taken away from the player</param>
+	public void UpdateMoney(int amount)
+	{
+		money += amount;
+
+		// Update UI
+		UIManager.instance.UpdatePlayerMoneyText();
 	}
 }
