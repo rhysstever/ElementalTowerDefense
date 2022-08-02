@@ -103,38 +103,39 @@ public class TowerManager : MonoBehaviour
 	{
 		towerInfo = new Dictionary<TowerType, TowerInfo>();
 
-		// === Create TowerInfo objects for each element ===
+		#region TowerInfo for each element
 		// Tier 1
 		towerInfo.Add(TowerType.Air,
-			new TowerInfo(towerSprites[TowerType.Air], bulletSprites[TowerType.Air], 20, 1, 0.33f, 8, false));
+			new TowerInfo(towerSprites[TowerType.Air], bulletSprites[TowerType.Air], 30, 1, 0.66f, 8.0f, false));
 		towerInfo.Add(TowerType.Earth,
-			new TowerInfo(towerSprites[TowerType.Earth], bulletSprites[TowerType.Earth], 20, 1, 0.33f, 8, true));
+			new TowerInfo(towerSprites[TowerType.Earth], bulletSprites[TowerType.Earth], 20, 6, 2.0f, 1.5f, true));
 		towerInfo.Add(TowerType.Fire,
-			new TowerInfo(towerSprites[TowerType.Fire], bulletSprites[TowerType.Fire], 20, 1, 0.33f, 8, false));
+			new TowerInfo(towerSprites[TowerType.Fire], bulletSprites[TowerType.Fire], 20, 3, 1.5f, 3.0f, false));
 		towerInfo.Add(TowerType.Water,
-			new TowerInfo(towerSprites[TowerType.Water], bulletSprites[TowerType.Water], 20, 1, 0.33f, 8, false));
+			new TowerInfo(towerSprites[TowerType.Water], bulletSprites[TowerType.Water], 20, 2, 1.25f, 5.0f, false));
 
-		// Tier 2 - single element
+		// Tier 2 - one element (x2)
 		towerInfo.Add(TowerType.Earthquake,
-			new TowerInfo(towerSprites[TowerType.Earthquake], bulletSprites[TowerType.Earth], 20, 1, 0.33f, 8, true));
+			new TowerInfo(towerSprites[TowerType.Earthquake], bulletSprites[TowerType.Earth], 150, 10, 1.5f, 3.5f, true));
 		towerInfo.Add(TowerType.Flamethrower,
-			new TowerInfo(towerSprites[TowerType.Flamethrower], bulletSprites[TowerType.Fire], 20, 1, 0.33f, 8, false));
+			new TowerInfo(towerSprites[TowerType.Flamethrower], bulletSprites[TowerType.Fire], 120, 5, 1.0f, 5.0f, false));
 		towerInfo.Add(TowerType.Tornado,
-			new TowerInfo(towerSprites[TowerType.Tornado], bulletSprites[TowerType.Air], 20, 1, 0.33f, 8, false));
+			new TowerInfo(towerSprites[TowerType.Tornado], bulletSprites[TowerType.Air], 140, 2, 0.33f, 8.0f, false));
 		towerInfo.Add(TowerType.Tsunami,
-			new TowerInfo(towerSprites[TowerType.Tsunami], bulletSprites[TowerType.Water], 20, 1, 0.33f, 8, false));
+			new TowerInfo(towerSprites[TowerType.Tsunami], bulletSprites[TowerType.Water], 100, 4, 0.75f, 6.0f, false));
 
-		// Tier 2 - double element
+		// Tier 2 - two elements (combo)
 		towerInfo.Add(TowerType.Blizzard,
-			new TowerInfo(towerSprites[TowerType.Blizzard], bulletSprites[TowerType.Air], 20, 1, 0.33f, 8, false));
+			new TowerInfo(towerSprites[TowerType.Blizzard], bulletSprites[TowerType.Air], 999, 0, 0.0f, 0.0f, false));
 		towerInfo.Add(TowerType.Flood,
-			new TowerInfo(towerSprites[TowerType.Flood], bulletSprites[TowerType.Water], 20, 1, 0.33f, 8, true));
+			new TowerInfo(towerSprites[TowerType.Flood], bulletSprites[TowerType.Water], 999, 0, 0.0f, 0.0f, true));
 		towerInfo.Add(TowerType.Volcano,
-			new TowerInfo(towerSprites[TowerType.Volcano], bulletSprites[TowerType.Earth], 20, 1, 0.33f, 8, true));
+			new TowerInfo(towerSprites[TowerType.Volcano], bulletSprites[TowerType.Earth], 999, 0, 0.0f, 0.0f, true));
 		towerInfo.Add(TowerType.Wildfire,
-			new TowerInfo(towerSprites[TowerType.Wildfire], bulletSprites[TowerType.Fire], 20, 1, 0.33f, 8, false));
+			new TowerInfo(towerSprites[TowerType.Wildfire], bulletSprites[TowerType.Fire], 999, 0, 0.0f, 0.0f, false));
+		#endregion
 
-		// === Add Upgrades ===
+		#region Upgrades
 		// Tier 2 - single element 
 		towerInfo[TowerType.Air].AddUpgrade(TowerType.Air, TowerType.Tornado);
 		towerInfo[TowerType.Earth].AddUpgrade(TowerType.Earth, TowerType.Earthquake);
@@ -150,5 +151,6 @@ public class TowerManager : MonoBehaviour
 		towerInfo[TowerType.Fire].AddUpgrade(TowerType.Earth, TowerType.Volcano);
 		towerInfo[TowerType.Water].AddUpgrade(TowerType.Air, TowerType.Blizzard);
 		towerInfo[TowerType.Water].AddUpgrade(TowerType.Earth, TowerType.Flood);
+		#endregion
 	}
 }

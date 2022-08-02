@@ -90,10 +90,17 @@ public class EnemyManager : MonoBehaviour
 	{
 		// Create Enemies
 		EnemyInfo basicEnemy = new EnemyInfo(
-			"Regular Red", 10, 1, 5, 2.0f);
+			"Normal", 5, 5, 5, 2.0f);
+		EnemyInfo tankEnemy = new EnemyInfo(
+			"Tanky", 15, 10, 10, 1.0f);
+		EnemyInfo fastEnemy = new EnemyInfo(
+			"Speedy", 3, 2, 2, 4.0f);
 
 		// Create Waves
-		Wave wave2 = new Wave("Wave 2", basicEnemy, 8, 1.0f);
+		Wave wave5 = new Wave("Wave 5", tankEnemy, 3, 2.0f);
+		Wave wave4 = new Wave("Wave 4", fastEnemy, 12, 0.5f, wave5);
+		Wave wave3 = new Wave("Wave 3", tankEnemy, 2, 2.5f, wave4);
+		Wave wave2 = new Wave("Wave 2", basicEnemy, 8, 1.0f, wave3);
 		Wave wave1 = new Wave("Wave 1", basicEnemy, 5, 1.0f, wave2);
 
 		// Set first wave
