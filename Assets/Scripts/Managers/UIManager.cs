@@ -82,24 +82,28 @@ public class UIManager : MonoBehaviour
 	/// </summary>
 	private void SetupUI()
 	{
-		// Menu Buttons
+		// Menu buttons
 		playButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.Game));
 		quitButton.GetComponent<Button>().onClick.AddListener(() => Application.Quit());
 		resumeButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.Game));
 		pauseToMainButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.MainMenu));
 		gameEndToMainButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.MainMenu));
 
-		// Tower Info Panel Open/Close Buttons
+		// Tower info panel open/close buttons
 		openTowerPanelButton.GetComponent<Button>().onClick.AddListener(() => SetTowerPanelActive(true));
 		closeTowerPanelButton.GetComponent<Button>().onClick.AddListener(() => SetTowerPanelActive(false));
 
-		// Set Tower Buy Button onClicks
+		// Set tower buy button onClicks
 		foreach(Transform buildTowerButton in towerBuildPanel.transform)
 			if(buildTowerButton.GetComponent<Tower>() != null)
 				buildTowerButton.GetComponent<Button>().onClick.AddListener(
 					() => BuildManager.instance.Build(buildTowerButton.GetComponent<Tower>().Type));
 
-		// Set Tower Info Button onClicks
+		// Set tower sell button onclick
+		selectedObjectPanel.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(
+			() => BuildManager.instance.Sell());
+
+		// Set tower info button onClicks
 		foreach(Transform towerInfoButton in typeInfoPanel.transform.GetChild(2))
 			towerInfoButton.GetComponent<Button>().onClick.AddListener(
 				() => UpdateSelectedTypeInfoUI(towerInfoButton.GetComponent<Tower>().Type));
@@ -162,22 +166,26 @@ public class UIManager : MonoBehaviour
 			selectedObjectPanel.SetActive(true);
 			selectedObjectPanel.transform.GetChild(0).gameObject.SetActive(true);
 			selectedObjectPanel.transform.GetChild(0).GetComponent<TMP_Text>().text = "Tile";
-			selectedObjectPanel.transform.GetChild(1).gameObject.SetActive(false);
-			selectedObjectPanel.transform.GetChild(2).gameObject.SetActive(false);
-			selectedObjectPanel.transform.GetChild(3).gameObject.SetActive(false);
+
+			// Hide everything else
+			for(int i = 1; i < selectedObjectPanel.transform.childCount; i++)
+				selectedObjectPanel.transform.GetChild(i).gameObject.SetActive(false);
 		}
 		else if(selectedGameObj.tag == "Tower")
 		{
 			selectedObjectPanel.SetActive(true);
-			selectedObjectPanel.transform.GetChild(0).gameObject.SetActive(true);
+
+			// Show everything
+			for(int i = 0; i < selectedObjectPanel.transform.childCount; i++)
+				selectedObjectPanel.transform.GetChild(i).gameObject.SetActive(true);
+
 			TowerType type = selectedGameObj.GetComponent<Tower>().Type;
 			TowerInfo towerInfo = TowerManager.instance.TowerInfo[type];
+
+			// Set stat texts
 			selectedObjectPanel.transform.GetChild(0).GetComponent<TMP_Text>().text = type + " Tower";
-			selectedObjectPanel.transform.GetChild(1).gameObject.SetActive(true);
 			selectedObjectPanel.transform.GetChild(1).GetComponent<TMP_Text>().text = "Damage: " + towerInfo.Damage;
-			selectedObjectPanel.transform.GetChild(2).gameObject.SetActive(true);
 			selectedObjectPanel.transform.GetChild(2).GetComponent<TMP_Text>().text = "Attack Speed: " + towerInfo.AttackSpeed;
-			selectedObjectPanel.transform.GetChild(3).gameObject.SetActive(true);
 			string rangeText = "Range: " + TowerManager.instance.TowerInfo[type].Range;
 			if(TowerManager.instance.TowerInfo[type].AOE)
 				rangeText += " AOE";

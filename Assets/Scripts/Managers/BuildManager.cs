@@ -39,13 +39,6 @@ public class BuildManager : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		//TODO: Remove when sell button are created
-		if(Input.GetKeyDown(KeyCode.Q))
-			Sell();
-	}
-
-	public void ClearTower()
-	{
 
 	}
 
@@ -149,7 +142,7 @@ public class BuildManager : MonoBehaviour
 		GameManager.instance.UpdateMoney(cost / 2);
 
 		// Select the tile under the tower
-		Select(currentSelection.GetComponent<Tower>().Tile);
+		currentSelection.GetComponent<Tower>().Tile.GetComponent<Selectable>().Select();
 		currentSelection.SetActive(true);
 
 		// Destroy the tower and unlink it from the tile
