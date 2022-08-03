@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class Wave
 {
+	// Fields 
 	private string name;
 	private int numOfEnemies;
-	private EnemyInfo enemyInfo;
+	private EnemyType enemyType;
 	private float spawnDelay;
 	private bool hasSpawned;
 	private bool hasCleared;
@@ -14,8 +15,9 @@ public class Wave
 	private int numLeft;
 	private Wave nextWave;
 
+	// Properties
 	public string Name { get { return name; } }
-	public EnemyInfo EnemyInfo { get { return enemyInfo; } }
+	public EnemyType EnemyType { get { return enemyType; } }
 	public int EnemyCount { get { return numOfEnemies; } }
 	public float SpawnDelay { get { return spawnDelay; } }
 	public bool HasSpawned { get { return hasSpawned; } }
@@ -24,15 +26,16 @@ public class Wave
 	public int EnemiesLeft { get { return numLeft; } }
 	public Wave NextWave { get { return nextWave; } }
 
+	// Constructors
 	/// <summary>
 	/// Creates a wave of enemies
 	/// </summary>
 	/// <param name="name">The name of the wave</param>
-	/// <param name="enemyInfo">The enemy info</param>
+	/// <param name="enemyType">The enemy type</param>
 	/// <param name="numOfEnemies">The number of enemies</param>
 	/// <param name="spawnDelay">How long in between each enemy will be spawned</param>
 	/// <param name="nextWave">The next wave that follows after this one is complete</param>
-	public Wave(string name, EnemyInfo enemyInfo, int numOfEnemies, float spawnDelay, Wave nextWave) : this(name, enemyInfo, numOfEnemies, spawnDelay)
+	public Wave(string name, EnemyType enemyType, int numOfEnemies, float spawnDelay, Wave nextWave) : this(name, enemyType, numOfEnemies, spawnDelay)
 	{
 		this.nextWave = nextWave;
 	}
@@ -41,13 +44,13 @@ public class Wave
 	/// Creates a wave of enemies
 	/// </summary>
 	/// <param name="name">The name of the wave</param>
-	/// <param name="enemyInfo">The enemy info</param>
+	/// <param name="enemyType">The enemy type</param>
 	/// <param name="numOfEnemies">The number of enemies</param>
 	/// <param name="spawnDelay">How long in between each enemy will be spawned</param>
-	public Wave(string name, EnemyInfo enemyInfo, int numOfEnemies, float spawnDelay)
+	public Wave(string name, EnemyType enemyType, int numOfEnemies, float spawnDelay)
 	{
 		this.name = name;
-		this.enemyInfo = enemyInfo;
+		this.enemyType = enemyType;
 		this.numOfEnemies = numOfEnemies;
 		this.spawnDelay = spawnDelay;
 		hasSpawned = false;
@@ -56,6 +59,7 @@ public class Wave
 		numLeft = numOfEnemies;
 	}
 
+	// Methods
 	/// <summary>
 	/// Starts a wave
 	/// </summary>
@@ -114,6 +118,6 @@ public class Wave
 	/// <returns>A full description of the wave</returns>
 	public string Description()
 	{
-		return name + ": \n" + numOfEnemies + " " + enemyInfo.EnemyName + " enemies";
+		return name + ": \n" + numOfEnemies + " " + enemyType + " enemies";
 	}
 }

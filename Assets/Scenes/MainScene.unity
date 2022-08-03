@@ -4665,7 +4665,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1132428563770451056, guid: 34ae049c7607345408b43d920784a8eb, type: 3}
       propertyPath: m_Name
-      value: headerTextPrefab
+      value: towerTypeHeader
       objectReference: {fileID: 0}
     - target: {fileID: 1132428563770451058, guid: 34ae049c7607345408b43d920784a8eb, type: 3}
       propertyPath: m_text

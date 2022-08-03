@@ -5,14 +5,8 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
 	public GameObject currentCheckpoint;
-
-	private string enemyName;
+	private EnemyType enemyType;
 	private int health;
-	private int damage;
-	private int goldWorth;
-	private float moveSpeed;
-
-	public string Name { get { return enemyName; } }
 
 	// Start is called before the first frame update
 	void Start()
@@ -40,16 +34,13 @@ public class Enemy : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Sets enemy stats
+	/// Set the type of enemy the object is
 	/// </summary>
-	/// <param name="enemyInfo">Stats for the enemy</param>
-	public void SetStats(EnemyInfo enemyInfo)
+	/// <param name="enemyInfo">The type of enemy</param>
+	public void SetType(EnemyType type)
 	{
-		enemyName = enemyInfo.EnemyName;
-		health = enemyInfo.Health;
-		damage = enemyInfo.Damage;
-		goldWorth = enemyInfo.GoldWorth;
-		moveSpeed = enemyInfo.MoveSpeed;
+		enemyType = type;
+		health = EnemyManager.instance.EnemyInfo[enemyType].Health;
 	}
 
 	/// <summary>
@@ -77,7 +68,7 @@ public class Enemy : MonoBehaviour
 		transform.position += EnemyManager.instance.CalculateMovement(
 			transform.position,
 			currentCheckpoint.transform.position,
-			moveSpeed);
+			EnemyManager.instance.EnemyInfo[enemyType].MoveSpeed);
 	}
 
 	/// <summary>
@@ -92,7 +83,7 @@ public class Enemy : MonoBehaviour
 		else
 		{
 			// Damage the base
-			GameManager.instance.UpdateHealth(-damage);
+			GameManager.instance.UpdateHealth(-EnemyManager.instance.EnemyInfo[enemyType].Damage);
 
 			// Delete the enenmy and update the wave
 			EnemyManager.instance.CurrentWave.EnemyRemoved();
@@ -110,7 +101,7 @@ public class Enemy : MonoBehaviour
 
 		if(health <= 0)
 		{
-			GameManager.instance.UpdateMoney(goldWorth);
+			GameManager.instance.UpdateMoney(EnemyManager.instance.EnemyInfo[enemyType].GoldWorth);
 
 			// Delete the enenmy and update the wave
 			EnemyManager.instance.CurrentWave.EnemyRemoved();

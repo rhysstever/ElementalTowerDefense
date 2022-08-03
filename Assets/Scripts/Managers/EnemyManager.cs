@@ -2,6 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum EnemyType
+{
+	Normal,
+	Tanky,
+	Speedy
+}
+
 public class EnemyManager : MonoBehaviour
 {
 	#region Singleton Code
@@ -24,12 +31,14 @@ public class EnemyManager : MonoBehaviour
 
 	[SerializeField]
 	private GameObject enemyParent, enemyPrefab;
+	private Dictionary<EnemyType, EnemyInfo> enemyInfo;
 
 	private Wave currentWave;
 	private float spawnTimer;
 
 	// Properties
 	public GameObject EnemyParent { get { return enemyParent; } }
+	public Dictionary<EnemyType, EnemyInfo> EnemyInfo { get { return enemyInfo; } }
 	public Wave CurrentWave { get { return currentWave; } }
 
 	// Start is called before the first frame update
@@ -88,20 +97,19 @@ public class EnemyManager : MonoBehaviour
 	/// </summary>
 	public void SetupEnemyWaves()
 	{
+		enemyInfo = new Dictionary<EnemyType, EnemyInfo>();
+
 		// Create Enemies
-		EnemyInfo basicEnemy = new EnemyInfo(
-			"Normal", 5, 5, 5, 2.0f);
-		EnemyInfo tankEnemy = new EnemyInfo(
-			"Tanky", 15, 10, 10, 1.0f);
-		EnemyInfo fastEnemy = new EnemyInfo(
-			"Speedy", 3, 2, 2, 4.0f);
+		enemyInfo.Add(EnemyType.Normal, new EnemyInfo(5, 5, 5, 2.0f));
+		enemyInfo.Add(EnemyType.Tanky, new EnemyInfo(15, 10, 10, 1.0f));
+		enemyInfo.Add(EnemyType.Speedy, new EnemyInfo(3, 2, 2, 4.0f));
 
 		// Create Waves
-		Wave wave5 = new Wave("Wave 5", tankEnemy, 3, 2.0f);
-		Wave wave4 = new Wave("Wave 4", fastEnemy, 12, 0.5f, wave5);
-		Wave wave3 = new Wave("Wave 3", tankEnemy, 2, 2.5f, wave4);
-		Wave wave2 = new Wave("Wave 2", basicEnemy, 8, 1.0f, wave3);
-		Wave wave1 = new Wave("Wave 1", basicEnemy, 5, 1.0f, wave2);
+		Wave wave5 = new Wave("Wave 5", EnemyType.Tanky, 3, 2.0f);
+		Wave wave4 = new Wave("Wave 4", EnemyType.Speedy, 12, 0.5f, wave5);
+		Wave wave3 = new Wave("Wave 3", EnemyType.Tanky, 2, 2.5f, wave4);
+		Wave wave2 = new Wave("Wave 2", EnemyType.Normal, 8, 1.0f, wave3);
+		Wave wave1 = new Wave("Wave 1", EnemyType.Normal, 5, 1.0f, wave2);
 
 		// Set first wave
 		currentWave = wave1;
@@ -140,7 +148,7 @@ public class EnemyManager : MonoBehaviour
 		
 		// Set the game object's name in the scene and its stats
 		newEnemy.name = "enemy" + (currentWave.EnemiesSpawned + 1);
-		newEnemy.GetComponent<Enemy>().SetStats(currentWave.EnemyInfo);
+		newEnemy.GetComponent<Enemy>().SetType(currentWave.EnemyType);
 
 		// Tell the wave an enemy was spawned
 		currentWave.EnemySpawned();

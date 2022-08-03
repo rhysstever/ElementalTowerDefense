@@ -72,7 +72,7 @@ public class Tower : MonoBehaviour
 	{
 		inRangeEnemies.Clear();
 
-		// Expensive - TODO: Simplify
+		// TODO: Simplify, its currently expensive
 		foreach(Transform enemyTrans in EnemyManager.instance.EnemyParent.transform)
 			if(Vector2.Distance(transform.position, enemyTrans.position)
 				<= TowerManager.instance.TowerInfo[type].Range)
@@ -84,7 +84,8 @@ public class Tower : MonoBehaviour
 	/// </summary>
 	private void TargetEnemy()
 	{
-		// Targetting first enemy in list - TODO: Change to be farthest along enemy
+		// TODO: Change to be farthest along enemy
+		// Targetting first enemy in list
 		if(inRangeEnemies.Count > 0)
 			currentTarget = inRangeEnemies[0];
 		else 

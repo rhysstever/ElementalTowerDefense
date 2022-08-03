@@ -124,6 +124,7 @@ public class TowerManager : MonoBehaviour
 		towerInfo.Add(TowerType.Tsunami,
 			new TowerInfo(towerSprites[TowerType.Tsunami], bulletSprites[TowerType.Water], 100, 4, 0.75f, 6.0f, false));
 
+		// TODO: Set stats for combo towers
 		// Tier 2 - two elements (combo)
 		towerInfo.Add(TowerType.Blizzard,
 			new TowerInfo(towerSprites[TowerType.Blizzard], bulletSprites[TowerType.Air], 999, 0, 0.0f, 0.0f, false));
