@@ -6,7 +6,7 @@ public class Enemy : MonoBehaviour
 {
 	public GameObject currentCheckpoint;
 	private EnemyType enemyType;
-	private int health;
+	private int health;	// Needs to be tracked since health per individual enemy will differ
 
 	// Start is called before the first frame update
 	void Start()
@@ -41,6 +41,7 @@ public class Enemy : MonoBehaviour
 	{
 		enemyType = type;
 		health = EnemyManager.instance.EnemyInfo[enemyType].Health;
+		GetComponent<SpriteRenderer>().sprite = EnemyManager.instance.EnemyInfo[enemyType].Sprite;
 	}
 
 	/// <summary>

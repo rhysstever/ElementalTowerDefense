@@ -31,6 +31,7 @@ public class EnemyManager : MonoBehaviour
 
 	[SerializeField]
 	private GameObject enemyParent, enemyPrefab;
+	private Dictionary<EnemyType, Sprite> enemySprites;
 	private Dictionary<EnemyType, EnemyInfo> enemyInfo;
 
 	private Wave currentWave;
@@ -44,7 +45,8 @@ public class EnemyManager : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-
+		LoadEnemySprites();
+		CreateEnemyInfoTypes();
 	}
 
 	// Update is called once per frame
@@ -93,17 +95,42 @@ public class EnemyManager : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Creates each enemy wave and sets initial values 
+	/// Loads sprites of each enemy type from the Resources folder
 	/// </summary>
-	public void SetupEnemyWaves()
+	private void LoadEnemySprites()
+	{
+		enemySprites = new Dictionary<EnemyType, Sprite>();
+		Sprite[] loadedSprites = Resources.LoadAll<Sprite>("Sprites/Enemies");
+
+		for(int i = 0; i < loadedSprites.Length; i++)
+		{
+			string enemyName = loadedSprites[i].name.Substring("enemy".Length);
+			EnemyType type = (EnemyType)System.Enum.Parse(typeof(EnemyType), enemyName);
+			enemySprites.Add(type, loadedSprites[i]);
+		}
+	}
+
+	/// <summary>
+	/// Create each type of enemy
+	/// </summary>
+	private void CreateEnemyInfoTypes()
 	{
 		enemyInfo = new Dictionary<EnemyType, EnemyInfo>();
 
 		// Create Enemies
-		enemyInfo.Add(EnemyType.Normal, new EnemyInfo(5, 5, 5, 2.0f));
-		enemyInfo.Add(EnemyType.Tanky, new EnemyInfo(15, 10, 10, 1.0f));
-		enemyInfo.Add(EnemyType.Speedy, new EnemyInfo(3, 2, 2, 4.0f));
+		enemyInfo.Add(EnemyType.Normal,
+			new EnemyInfo(enemySprites[EnemyType.Normal], 5, 5, 5, 2.0f));
+		enemyInfo.Add(EnemyType.Tanky,
+			new EnemyInfo(enemySprites[EnemyType.Tanky], 15, 10, 10, 1.0f));
+		enemyInfo.Add(EnemyType.Speedy,
+			new EnemyInfo(enemySprites[EnemyType.Speedy], 3, 2, 2, 4.0f));
+	}
 
+	/// <summary>
+	/// Creates each enemy wave and sets initial values 
+	/// </summary>
+	public void SetupEnemyWaves()
+	{
 		// Create Waves
 		Wave wave5 = new Wave("Wave 5", EnemyType.Tanky, 3, 2.0f);
 		Wave wave4 = new Wave("Wave 4", EnemyType.Speedy, 12, 0.5f, wave5);

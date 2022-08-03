@@ -64,18 +64,18 @@ public class TowerManager : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		LoadSprites();
+		LoadTowerSprites();
 		CreateTowerInfoDictionary();
 	}
 
 	/// <summary>
-	/// Link each tower type with the corresponding sprite, via dictionary
+	/// Loads sprites of each tower and bullet type from the Resources folder
 	/// </summary>
-	private void LoadSprites()
+	private void LoadTowerSprites()
 	{
 		// Load Tower Sprites
 		towerSprites = new Dictionary<TowerType, Sprite>();
-		Sprite[] loadedSprites = Resources.LoadAll<Sprite>("Sprites/ElementIcons");
+		Sprite[] loadedSprites = Resources.LoadAll<Sprite>("Sprites/Elements");
 
 		for(int i = 0; i < loadedSprites.Length; i++)
 		{

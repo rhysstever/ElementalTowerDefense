@@ -4,21 +4,23 @@ using UnityEngine;
 
 public class EnemyInfo
 {
-	// TODO: Add enemy sprite
 	// Fields
+	private Sprite enemySprite;
 	private int health;
 	private int damage;
 	private int goldWorth;
 	private float moveSpeed;
 
 	// Properties
+	public Sprite Sprite { get { return enemySprite; } }
 	public int Health { get { return health; } }
 	public int Damage { get { return damage; } }
 	public int GoldWorth { get { return goldWorth; } }
 	public float MoveSpeed { get { return moveSpeed;} }
 
-	public EnemyInfo(int health, int damage, int goldWorth, float moveSpeed)
+	public EnemyInfo(Sprite enemySprite, int health, int damage, int goldWorth, float moveSpeed)
 	{
+		this.enemySprite = enemySprite;
 		this.health = health;
 		this.damage = damage;
 		this.goldWorth = goldWorth;
