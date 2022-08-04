@@ -108,9 +108,9 @@ public class TowerManager : MonoBehaviour
 		towerInfo.Add(TowerType.Air,
 			new TowerInfo(towerSprites[TowerType.Air], bulletSprites[TowerType.Air], 30, 1, 0.66f, 8.0f, false));
 		towerInfo.Add(TowerType.Earth,
-			new TowerInfo(towerSprites[TowerType.Earth], bulletSprites[TowerType.Earth], 20, 6, 2.0f, 1.5f, true));
+			new TowerInfo(towerSprites[TowerType.Earth], bulletSprites[TowerType.Earth], 20, 6, 2.0f, 2.5f, true));
 		towerInfo.Add(TowerType.Fire,
-			new TowerInfo(towerSprites[TowerType.Fire], bulletSprites[TowerType.Fire], 20, 3, 1.5f, 3.0f, false));
+			new TowerInfo(towerSprites[TowerType.Fire], bulletSprites[TowerType.Fire], 20, 3, 1.5f, 4.0f, false));
 		towerInfo.Add(TowerType.Water,
 			new TowerInfo(towerSprites[TowerType.Water], bulletSprites[TowerType.Water], 20, 2, 1.25f, 5.0f, false));
 

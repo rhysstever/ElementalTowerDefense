@@ -36,6 +36,7 @@ public class TowerInfo
 		upgrades = new Dictionary<TowerType, TowerType>();
 	}
 
+	// Methods
 	/// <summary>
 	/// Add a possible upgrade to this tower type
 	/// </summary>
@@ -44,5 +45,16 @@ public class TowerInfo
 	public void AddUpgrade(TowerType secondaryType, TowerType upgradeType)
 	{
 		upgrades.Add(secondaryType, upgradeType);
+	}
+
+	public string GetCostText() { return "Cost: " + cost; }
+	public string GetDamageText() { return "Damage: " + damage; }
+	public string GetAttackSpeedText() { return "Attack Rate: " + attackSpeed + "s"; }
+	public string GetRangeText() 
+	{
+		string text = "Range: " + range;
+		if(hasAOE)
+			text += " AOE";
+		return text; 
 	}
 }

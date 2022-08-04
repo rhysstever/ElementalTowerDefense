@@ -957,7 +957,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4164031749045915730, guid: 6a43b13924c0d754f963f133b34e4cf3, type: 3}
       propertyPath: m_text
-      value: 'Attack Speed: #'
+      value: 'Attack Rate: #s'
+      objectReference: {fileID: 0}
+    - target: {fileID: 4164031749045915730, guid: 6a43b13924c0d754f963f133b34e4cf3, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4278190080
       objectReference: {fileID: 0}
     - target: {fileID: 8426290100737262663, guid: 6a43b13924c0d754f963f133b34e4cf3, type: 3}
       propertyPath: m_Pivot.x
@@ -3355,7 +3359,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4164031749045915730, guid: 6a43b13924c0d754f963f133b34e4cf3, type: 3}
       propertyPath: m_text
-      value: 'Attack Speed: #'
+      value: 'Attack Rate: #/s'
       objectReference: {fileID: 0}
     - target: {fileID: 4164031749045915730, guid: 6a43b13924c0d754f963f133b34e4cf3, type: 3}
       propertyPath: m_fontColor32.rgba
@@ -4142,11 +4146,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7643399692716220760, guid: ade952e3e6d0abe4dad322dffa2b2769, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 97.89
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7643399692716220760, guid: ade952e3e6d0abe4dad322dffa2b2769, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -80
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7643399692716220760, guid: ade952e3e6d0abe4dad322dffa2b2769, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

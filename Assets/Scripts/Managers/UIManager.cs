@@ -184,12 +184,9 @@ public class UIManager : MonoBehaviour
 
 			// Set stat texts
 			selectedObjectPanel.transform.GetChild(0).GetComponent<TMP_Text>().text = type + " Tower";
-			selectedObjectPanel.transform.GetChild(1).GetComponent<TMP_Text>().text = "Damage: " + towerInfo.Damage;
-			selectedObjectPanel.transform.GetChild(2).GetComponent<TMP_Text>().text = "Attack Speed: " + towerInfo.AttackSpeed;
-			string rangeText = "Range: " + TowerManager.instance.TowerInfo[type].Range;
-			if(TowerManager.instance.TowerInfo[type].AOE)
-				rangeText += " AOE";
-			selectedObjectPanel.transform.GetChild(3).GetComponent<TMP_Text>().text = rangeText;
+			selectedObjectPanel.transform.GetChild(1).GetComponent<TMP_Text>().text = towerInfo.GetDamageText();
+			selectedObjectPanel.transform.GetChild(2).GetComponent<TMP_Text>().text = towerInfo.GetAttackSpeedText();
+			selectedObjectPanel.transform.GetChild(3).GetComponent<TMP_Text>().text = towerInfo.GetRangeText();
 		}
 		else
 			selectedObjectPanel.SetActive(false);
@@ -203,16 +200,14 @@ public class UIManager : MonoBehaviour
 	{
 		// Update value in TowerManager
 		TowerManager.instance.SelectedTypeInfo = selectedType;
+		TowerInfo towerInfo = TowerManager.instance.TowerInfo[selectedType];
 
 		typeInfoSubPanel.SetActive(true);
 		typeInfoSubPanel.transform.GetChild(0).GetComponent<TMP_Text>().text = selectedType + " Tower";
-		typeInfoSubPanel.transform.GetChild(1).GetComponent<TMP_Text>().text = "Cost: " + TowerManager.instance.TowerInfo[selectedType].Cost;
-		typeInfoSubPanel.transform.GetChild(2).GetComponent<TMP_Text>().text = "Damage: " + TowerManager.instance.TowerInfo[selectedType].Damage;
-		typeInfoSubPanel.transform.GetChild(3).GetComponent<TMP_Text>().text = "Attack Speed: " + TowerManager.instance.TowerInfo[selectedType].AttackSpeed;
-		string rangeText = "Range: " + TowerManager.instance.TowerInfo[selectedType].Range;
-		if(TowerManager.instance.TowerInfo[selectedType].AOE)
-			rangeText += " AOE";
-		typeInfoSubPanel.transform.GetChild(4).GetComponent<TMP_Text>().text = rangeText;
+		typeInfoSubPanel.transform.GetChild(1).GetComponent<TMP_Text>().text = towerInfo.GetCostText();
+		typeInfoSubPanel.transform.GetChild(2).GetComponent<TMP_Text>().text = towerInfo.GetDamageText();
+		typeInfoSubPanel.transform.GetChild(3).GetComponent<TMP_Text>().text = towerInfo.GetAttackSpeedText();
+		typeInfoSubPanel.transform.GetChild(4).GetComponent<TMP_Text>().text = towerInfo.GetRangeText();
 	}
 
 	/// <summary>
