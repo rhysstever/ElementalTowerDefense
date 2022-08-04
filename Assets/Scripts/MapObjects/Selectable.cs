@@ -39,8 +39,8 @@ public class Selectable : MonoBehaviour
 	{
 		isSelected = select;
 
-		// If this is a tile, change its color to yellow
+		// If this is a tile, update its color
 		if(gameObject.tag == "Tile")
-			GetComponent<SpriteRenderer>().color = select ? Color.yellow : new Color(0.8f, 0.8f, 0.8f);
+			gameObject.GetComponent<Tile>().UpdateColor(select);
 	}
 }

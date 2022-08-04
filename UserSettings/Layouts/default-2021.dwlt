@@ -317,22 +317,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Resources/Sprites/Enemies
+    - Assets/Scripts/Tower
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Resources/Sprites/Enemies
+  - Assets/Scripts/Tower
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\Rhys\Desktop\PersonalProjects\TowerDefense2D
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 3}
-    m_SelectedIDs: c2740000
-    m_LastClickedID: 29890
-    m_ExpandedIDs: 000000003e610000406100004261000044610000466100005c61000000ca9a3b
+    scrollPos: {x: 0, y: 63}
+    m_SelectedIDs: 72610000
+    m_LastClickedID: 24946
+    m_ExpandedIDs: 000000004a6100004c6100004e61000050610000526100006861000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -360,7 +360,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000003e61000040610000426100004461000046610000
+    m_ExpandedIDs: 000000004a6100004c6100004e6100005061000052610000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -488,9 +488,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 82610000
-      m_LastClickedID: 0
-      m_ExpandedIDs: 2cfbffff
+      m_SelectedIDs: e25e0000
+      m_LastClickedID: 24290
+      m_ExpandedIDs: 2cfbffff8e5e0000d25e0000e25e0000125f00004a5f0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -761,9 +761,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 0, y: 1, z: 0}
+    m_Target: {x: 976.6089, y: 480.67307, z: 9.476778}
     speed: 2
-    m_Value: {x: 0, y: 1, z: 0}
+    m_Value: {x: 976.6089, y: 480.67307, z: 9.476778}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -814,9 +814,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 10
+    m_Target: 509.77795
     speed: 2
-    m_Value: 10
+    m_Value: 509.77795
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -955,7 +955,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 1050
-    width: 2135
+    width: 2021
     height: 309
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:

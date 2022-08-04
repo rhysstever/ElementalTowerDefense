@@ -44,7 +44,6 @@ public class MapManager : MonoBehaviour
 	{
 		xOffset = 1.0f;
 		yOffset = 1.0f;
-
 		startingPos = new Vector2(-9.0f, 6.0f);
 
 		CreateMap();
