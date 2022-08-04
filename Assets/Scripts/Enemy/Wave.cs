@@ -65,16 +65,8 @@ public class Wave
 	/// </summary>
 	public void StartSpawn()
 	{
-		if(hasCleared)
-		{
-			Debug.LogError("Wave already cleared");
+		if(hasCleared || hasSpawned)
 			return;
-		}
-		else if(hasSpawned)
-		{
-			Debug.LogError("Wave already spawned");
-			return;
-		}
 
 		hasSpawned = true;
 	}

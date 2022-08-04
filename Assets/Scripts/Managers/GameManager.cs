@@ -85,12 +85,14 @@ public class GameManager : MonoBehaviour
 				MapManager.instance.ClearMap();
 				break;
 			case MenuState.Game:
-				EnemyManager.instance.SetupEnemyWaves();
-				BuildManager.instance.Select(null); // Set initial selection
-
 				// If the player is going from the Main Menu to the Game state
 				if(currentMenuState == MenuState.MainMenu)
+				{
 					MapManager.instance.SpawnCurrentMap();  // Create the map
+					EnemyManager.instance.SetupEnemyWaves();
+				}
+
+				BuildManager.instance.Select(null); // Set initial selection
 				break;
 			case MenuState.Pause:
 				break;

@@ -41,6 +41,6 @@ public class Selectable : MonoBehaviour
 
 		// If this is a tile, change its color to yellow
 		if(gameObject.tag == "Tile")
-			GetComponent<SpriteRenderer>().color = select ? Color.yellow : new Color(0.6f, 0.6f, 0.6f);
+			GetComponent<SpriteRenderer>().color = select ? Color.yellow : new Color(0.8f, 0.8f, 0.8f);
 	}
 }
