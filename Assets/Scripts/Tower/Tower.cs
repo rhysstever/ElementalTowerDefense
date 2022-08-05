@@ -31,7 +31,7 @@ public class Tower : MonoBehaviour
 	void Update()
 	{
 		DetectEnemies();
-		TargetEnemy();
+		currentTarget = TargetEnemy();
 	}
 
 	void FixedUpdate()
@@ -80,16 +80,39 @@ public class Tower : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Sets the current target
+	/// Finds the enemy that is the farthest along
 	/// </summary>
-	private void TargetEnemy()
+	/// <returns>The gameObject the tower will target</returns>
+	private GameObject TargetEnemy()
 	{
-		// TODO: Change to be farthest along enemy
-		// Targetting first enemy in list
-		if(inRangeEnemies.Count > 0)
-			currentTarget = inRangeEnemies[0];
-		else 
-			currentTarget = null;
+		// If there at least one enemy within range, set the initial farthest along enemy to be the first one in the list
+		GameObject farthestAlongEnemy = inRangeEnemies.Count > 0 ? inRangeEnemies[0] : null;
+
+		foreach(GameObject enemy in inRangeEnemies)
+		{
+			// Skip self-checks
+			if(farthestAlongEnemy == enemy)
+				continue;
+
+			// Get info about both enemies being compared
+			Enemy farthestEnemyData = farthestAlongEnemy.GetComponent<Enemy>();
+			Enemy enemyData = enemy.GetComponent<Enemy>();
+
+			// An enemy is farther along if it is moving towards a larger numbered checkpoint
+			if(int.Parse(enemyData.currentCheckpoint.name.Substring("checkpoint".Length)) >
+				int.Parse(farthestEnemyData.currentCheckpoint.name.Substring("checkpoint".Length)))
+				farthestAlongEnemy = enemy;
+			// If the checkpoints are the same, compare the distances to the checkpoint
+			else if(int.Parse(enemyData.currentCheckpoint.name.Substring("checkpoint".Length)) ==
+				int.Parse(farthestEnemyData.currentCheckpoint.name.Substring("checkpoint".Length)))
+			{
+				// An enemy is farther along if its distance to the checkpoint is shorter
+				if(enemyData.DistToCP < farthestEnemyData.DistToCP)
+					farthestAlongEnemy = enemy;
+			}
+		}
+
+		return farthestAlongEnemy;
 	}
 
 	/// <summary>

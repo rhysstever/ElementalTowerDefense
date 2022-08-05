@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour
 	private EnemyType enemyType;
 	private int health;	// Needs to be tracked since health per individual enemy will differ
 
+	public float DistToCP { get { return Vector2.Distance(transform.position, currentCheckpoint.transform.position); } }
 	public EnemyType Type { get { return enemyType; } }
 
 	// Start is called before the first frame update

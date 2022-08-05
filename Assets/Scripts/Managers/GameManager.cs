@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour
 		{
 			case MenuState.MainMenu:
 				health = 100;
-				money = 100;
+				money = 80;
 				UIManager.instance.UpdatePlayerHealthText();
 				UIManager.instance.UpdatePlayerMoneyText();
 				MapManager.instance.ClearMap();
