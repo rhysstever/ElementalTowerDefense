@@ -12,8 +12,8 @@ Visit http://rhysstever.me/TowerDefense2D/ to play in browser. A downloadable .e
 
 ## Enemies
 
-|   | Name | Description | 
-| - | ------ | --- |
-| 1 | Normal | Medium speed, health, bounty, and damage to base | 
-| 2 | Speedy | Faster, less health, deals less damage. Gives the smallest bounty | 
-| 3 | Tanky | Slower, more health, larger bounty. Deals the most damage to the base | 
+| Name | Description | 
+| ------ | --- |
+| Normal | Medium speed, health, bounty, and damage to base | 
+| Speedy | Faster, less health, deals less damage. Gives the smallest bounty | 
+| Tanky | Slower, more health, larger bounty. Deals the most damage to the base | 
