@@ -37,7 +37,7 @@ public class UIManager : MonoBehaviour
 	[SerializeField]    // Panels
 	private GameObject towerBuildPanel, selectedObjectPanel, typeInfoPanel, typeInfoSubPanel;
 	[SerializeField]    // Buttons
-	private GameObject openTowerPanelButton, closeTowerPanelButton, sellTowerButton;
+	private GameObject openTowerPanelButton, closeTowerPanelButton, sellTowerButton, pauseGameButton;
 
 	// Pause
 	[SerializeField]
@@ -99,6 +99,7 @@ public class UIManager : MonoBehaviour
 		playButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.Game));
 		mainMenuToControlsButton.GetComponent<Button>().onClick.AddListener(() => OpenControlsMenu(MenuState.MainMenu));
 		quitButton.GetComponent<Button>().onClick.AddListener(() => Application.Quit());
+		pauseGameButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.Pause));
 		resumeButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.Game));
 		pauseToControlsButton.GetComponent<Button>().onClick.AddListener(() => OpenControlsMenu(MenuState.Pause));
 		pauseToMainButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.MainMenu));
