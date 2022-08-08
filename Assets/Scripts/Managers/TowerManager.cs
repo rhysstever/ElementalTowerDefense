@@ -12,9 +12,9 @@ public enum TowerType
 	Water,
 
 	// Tier 2 - single elemet
-	Tornado,
 	Earthquake,
 	Flamethrower,
+	Tornado,
 	Tsunami,
 
 	// Tier 2 - double element

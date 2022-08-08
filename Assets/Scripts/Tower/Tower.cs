@@ -72,7 +72,7 @@ public class Tower : MonoBehaviour
 	{
 		inRangeEnemies.Clear();
 
-		// TODO: Simplify, its currently expensive
+		// Loop through each enemy and check if they are within range
 		foreach(Transform enemyTrans in EnemyManager.instance.EnemyParent.transform)
 			if(Vector2.Distance(transform.position, enemyTrans.position)
 				<= TowerManager.instance.TowerInfo[type].Range)
