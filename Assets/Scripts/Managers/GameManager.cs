@@ -7,6 +7,7 @@ public enum MenuState
 	MainMenu,
 	Game,
 	Pause,
+	Controls,
 	GameEnd
 }
 
@@ -95,6 +96,8 @@ public class GameManager : MonoBehaviour
 				BuildManager.instance.Select(null); // Set initial selection
 				break;
 			case MenuState.Pause:
+				break;
+			case MenuState.Controls:
 				break;
 			case MenuState.GameEnd:
 				UIManager.instance.UpdateGameEndText(health > 0);

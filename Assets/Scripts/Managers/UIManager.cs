@@ -25,26 +25,35 @@ public class UIManager : MonoBehaviour
 	#endregion
 
 	[SerializeField]    // Parent Objects
-	private GameObject mainMenuParent, gameParent, pauseParent, gameEndParent;
+	private GameObject mainMenuParent, gameParent, pauseParent, controlsParent, gameEndParent;
 
-	[SerializeField]    // Main Menu Buttons
-	private GameObject playButton, quitButton;
-	[SerializeField]    // Pause Menu Buttons
-	private GameObject resumeButton, pauseToMainButton;
-	[SerializeField]    // Game End Menu Buttons
-	private GameObject gameEndToMainButton;
+	// Main Menu
+	[SerializeField]
+	private GameObject playButton, mainMenuToControlsButton, quitButton;
 	
-	[SerializeField]    // Game Menu Text
+	// Game
+	[SerializeField]    // Text
 	private GameObject healthText, moneyText, waveText;
-	[SerializeField]    // Game Menu Panels
+	[SerializeField]    // Panels
 	private GameObject towerBuildPanel, selectedObjectPanel, typeInfoPanel, typeInfoSubPanel;
-	[SerializeField]    // Game Menu buttons
+	[SerializeField]    // Buttons
 	private GameObject openTowerPanelButton, closeTowerPanelButton, sellTowerButton;
 
+	// Pause
 	[SerializeField]
-	private GameObject gameEndHeaderText;
+	private GameObject resumeButton, pauseToControlsButton, pauseToMainButton;
+	
+	// Controls
+	[SerializeField]
+	private GameObject closeControlsButton, backButton, nextButton;
+
+	// Game End
+	[SerializeField] 
+	private GameObject gameEndHeaderText, gameEndToMainButton;
 
 	private Dictionary<MenuState, GameObject> menuStateUIParents;
+	private MenuState menuStateBeforeControlsMenu;
+	private int controlsTextIndex;
 
 	// Properties
 	public bool IsInfoPanelOpen { get { return typeInfoPanel.activeInHierarchy; } }
@@ -54,6 +63,9 @@ public class UIManager : MonoBehaviour
 	{
 		LinkMenuStateParents();
 		SetupUI();
+
+		menuStateBeforeControlsMenu = MenuState.MainMenu;
+		controlsTextIndex = -1;
 	}
 
 	// Update is called once per frame
@@ -74,6 +86,7 @@ public class UIManager : MonoBehaviour
 		menuStateUIParents.Add(MenuState.MainMenu, mainMenuParent);
 		menuStateUIParents.Add(MenuState.Game, gameParent);
 		menuStateUIParents.Add(MenuState.Pause, pauseParent);
+		menuStateUIParents.Add(MenuState.Controls, controlsParent);
 		menuStateUIParents.Add(MenuState.GameEnd, gameEndParent);
 	}
 
@@ -84,8 +97,10 @@ public class UIManager : MonoBehaviour
 	{
 		// Menu buttons
 		playButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.Game));
+		mainMenuToControlsButton.GetComponent<Button>().onClick.AddListener(() => OpenControlsMenu(MenuState.MainMenu));
 		quitButton.GetComponent<Button>().onClick.AddListener(() => Application.Quit());
 		resumeButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.Game));
+		pauseToControlsButton.GetComponent<Button>().onClick.AddListener(() => OpenControlsMenu(MenuState.Pause));
 		pauseToMainButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.MainMenu));
 		gameEndToMainButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.MainMenu));
 
@@ -93,20 +108,25 @@ public class UIManager : MonoBehaviour
 		openTowerPanelButton.GetComponent<Button>().onClick.AddListener(() => SetTowerPanelActive(true));
 		closeTowerPanelButton.GetComponent<Button>().onClick.AddListener(() => SetTowerPanelActive(false));
 
-		// Set tower buy button onClicks
+		// Set tower buy buttons
 		foreach(Transform buildTowerButton in towerBuildPanel.transform)
 			if(buildTowerButton.GetComponent<Tower>() != null)
 				buildTowerButton.GetComponent<Button>().onClick.AddListener(
 					() => BuildManager.instance.Build(buildTowerButton.GetComponent<Tower>().Type));
 
-		// Set tower sell button onclick
+		// Set tower sell button
 		sellTowerButton.GetComponent<Button>().onClick.AddListener(
 			() => BuildManager.instance.Sell());
 
-		// Set tower info button onClicks
+		// Set tower info buttons
 		foreach(Transform towerInfoButton in typeInfoPanel.transform.GetChild(2))
 			towerInfoButton.GetComponent<Button>().onClick.AddListener(
 				() => UpdateSelectedTypeInfoUI(towerInfoButton.GetComponent<Tower>().Type));
+
+		// Controls buttons
+		closeControlsButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(menuStateBeforeControlsMenu));
+		nextButton.GetComponent<Button>().onClick.AddListener(() => NextControlsText());
+		backButton.GetComponent<Button>().onClick.AddListener(() => BackControlsText());
 	}
 
 	/// <summary>
@@ -117,6 +137,7 @@ public class UIManager : MonoBehaviour
 	{
 		foreach(MenuState menuState in menuStateUIParents.Keys)
 		{
+			// Dont hide the game menu UI when the game is paused
 			if(newMenuState == MenuState.Pause
 				&& menuState == MenuState.Game)
 				continue;
@@ -244,6 +265,37 @@ public class UIManager : MonoBehaviour
 		// If the tower panel is visible, hide the side info panel
 		if(isTowerPanelActive)
 			typeInfoSubPanel.SetActive(false);
+	}
+
+	private void OpenControlsMenu(MenuState previousMenuState)
+	{
+		controlsTextIndex = -1;
+		NextControlsText();
+		menuStateBeforeControlsMenu = previousMenuState;
+		GameManager.instance.ChangeMenuState(MenuState.Controls);
+	}
+
+	private void NextControlsText()
+	{
+		controlsTextIndex++;
+		UpdateControlsMenu();
+	}
+
+	private void BackControlsText()
+	{
+		controlsTextIndex--;
+		UpdateControlsMenu();
+	}
+
+	private void UpdateControlsMenu()
+	{
+		// Show or hide the back and next buttons
+		backButton.SetActive(controlsTextIndex != 0);
+		nextButton.SetActive(controlsTextIndex != controlsParent.transform.GetChild(0).GetChild(1).childCount - 1);
+
+		// Show the right text
+		for(int i = 0; i < controlsParent.transform.GetChild(0).GetChild(1).childCount; i++)
+			controlsParent.transform.GetChild(0).GetChild(1).GetChild(i).gameObject.SetActive(i == controlsTextIndex);
 	}
 
 	/// <summary>
