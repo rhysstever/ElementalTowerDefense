@@ -268,6 +268,10 @@ public class UIManager : MonoBehaviour
 			typeInfoSubPanel.SetActive(false);
 	}
 
+	/// <summary>
+	/// Open the controls menu panel
+	/// </summary>
+	/// <param name="previousMenuState">The previous state of the game</param>
 	private void OpenControlsMenu(MenuState previousMenuState)
 	{
 		controlsTextIndex = -1;
@@ -276,18 +280,27 @@ public class UIManager : MonoBehaviour
 		GameManager.instance.ChangeMenuState(MenuState.Controls);
 	}
 
+	/// <summary>
+	/// Shows the next group of controls menu text
+	/// </summary>
 	private void NextControlsText()
 	{
 		controlsTextIndex++;
 		UpdateControlsMenu();
 	}
 
+	/// <summary>
+	/// Shows the previous group of controls menu text
+	/// </summary>
 	private void BackControlsText()
 	{
 		controlsTextIndex--;
 		UpdateControlsMenu();
 	}
 
+	/// <summary>
+	/// Update the controls menu's elements
+	/// </summary>
 	private void UpdateControlsMenu()
 	{
 		// Show or hide the back and next buttons
