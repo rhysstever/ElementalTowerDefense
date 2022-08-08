@@ -8,12 +8,21 @@ Visit http://rhysstever.me/TowerDefense2D/ to play in browser. A downloadable .e
 
 ## Towers
 
-
+| Name | Element(s) | Description |
+| ---- | ---------- | ----------- |
+| Air | Air | Fast attacks |
+| Earth | Earth | AOE: attack all enemies in range |
+| Fire | Fire | Attacks deal damage over time |
+| Water | Water | Attacks slow |
+| Tornado | Air + Air | Extra fast attacks |
+| Quake | Earth + Earth | Larger range/AOE |
+| Blaze | Fire + Fire | DoT lasts longer and deals more damage |
+| Tsunami | Water + Water | Slow is stronger and lasts longer |
 
 ## Enemies
 
 | Name | Description | 
-| ------ | --- |
+| ---- | ----------- |
 | Normal | Medium speed, health, bounty, and damage to base | 
 | Speedy | Faster, less health, deals less damage. Gives the smallest bounty | 
 | Tanky | Slower, more health, larger bounty. Deals the most damage to the base | 
