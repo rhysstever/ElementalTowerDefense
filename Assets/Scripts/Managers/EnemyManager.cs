@@ -132,9 +132,14 @@ public class EnemyManager : MonoBehaviour
 	public void SetupEnemyWaves()
 	{
 		// Create Waves
-		Wave wave5 = new Wave("Wave 5", EnemyType.Tanky, 3, 2.0f);
-		Wave wave4 = new Wave("Wave 4", EnemyType.Speedy, 12, 0.5f, wave5);
-		Wave wave3 = new Wave("Wave 3", EnemyType.Tanky, 2, 2.5f, wave4);
+		Wave wave10 = new Wave("Wave 10", EnemyType.Tanky, 10, 2.5f);
+		Wave wave9 = new Wave("Wave 9", EnemyType.Speedy, 25, 0.5f, wave10);
+		Wave wave8 = new Wave("Wave 8", EnemyType.Normal, 16, 1.0f, wave9);
+		Wave wave7 = new Wave("Wave 7", EnemyType.Tanky, 5, 2.5f, wave8);
+		Wave wave6 = new Wave("Wave 6", EnemyType.Speedy, 15, 0.5f, wave7);
+		Wave wave5 = new Wave("Wave 5", EnemyType.Normal, 12, 1.0f, wave6);
+		Wave wave4 = new Wave("Wave 4", EnemyType.Tanky, 2, 2.5f, wave5);
+		Wave wave3 = new Wave("Wave 3", EnemyType.Speedy, 12, 0.5f, wave4);
 		Wave wave2 = new Wave("Wave 2", EnemyType.Normal, 8, 1.0f, wave3);
 		Wave wave1 = new Wave("Wave 1", EnemyType.Normal, 5, 1.0f, wave2);
 
