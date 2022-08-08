@@ -8,15 +8,8 @@ public class Slow : Affliction
 
     public float SlowAmount { get { return slowPercent; } }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    public void SetAffliction(float duration, float slowPercentAmount)
+    public Slow(string name, float duration, float slowPercent) : base(name, AfflictionType.Slow, duration)
 	{
-        SetAffliction(AfflictionType.Slow, duration);
-        slowPercent = slowPercentAmount;
+        this.slowPercent = slowPercent;
 	}
 }

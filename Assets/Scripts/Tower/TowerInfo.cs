@@ -12,6 +12,7 @@ public class TowerInfo
 	private float attackSpeed;
 	private float range;
 	private bool hasAOE;
+	private Affliction affliction;
 	private Dictionary<TowerType, TowerType> upgrades;
 
 	// Properties
@@ -22,9 +23,10 @@ public class TowerInfo
 	public float AttackSpeed { get { return attackSpeed; } }
 	public float Range { get { return range; } }
 	public bool AOE { get { return hasAOE; } }
+	public Affliction Affliction { get { return affliction; } }
 	public Dictionary<TowerType, TowerType> Upgrades { get { return upgrades; } }
 
-	public TowerInfo(Sprite towerSprite, Sprite bulletSprite, int cost, int damage, float attackSpeed, float range, bool hasAOE)
+	public TowerInfo(Sprite towerSprite, Sprite bulletSprite, int cost, int damage, float attackSpeed, float range, bool hasAOE, Affliction affliction)
 	{
 		this.towerSprite = towerSprite;
 		this.bulletSprite = bulletSprite;
@@ -33,6 +35,7 @@ public class TowerInfo
 		this.attackSpeed = attackSpeed;
 		this.range = range;
 		this.hasAOE = hasAOE;
+		this.affliction = affliction;
 		upgrades = new Dictionary<TowerType, TowerType>();
 	}
 
@@ -56,5 +59,27 @@ public class TowerInfo
 		if(hasAOE)
 			text += " AOE";
 		return text; 
+	}
+	public string GetAfflictionText()
+	{
+		if(affliction == null)
+			return "";
+
+		string str = affliction.Name + ": ";
+
+		switch(affliction.Type)
+		{
+			case AfflictionType.DamageOverTime:
+				DamageOverTime dot = (DamageOverTime)affliction;
+				str += dot.Damage + " dmg every " + dot.ProcRate + "s for " + dot.FullDuration + "s";
+				break;
+			case AfflictionType.Slow:
+				Slow slow = (Slow)affliction;
+				int slowAmount = (int)(slow.SlowAmount * 100);
+				str += slowAmount + "% slow for " + slow.FullDuration + "s";
+				break;
+		}
+
+		return str;
 	}
 }

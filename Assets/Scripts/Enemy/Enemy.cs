@@ -8,14 +8,14 @@ public class Enemy : MonoBehaviour
 	private EnemyType enemyType;
 
 	// Need to be tracked since per enemy values will differ
-	private int currentHealth; 
+	private float currentHealth; 
 	private float currentMoveSpeed;
 	private List<Affliction> afflictions;
 
 	public float DistToCP { get { return Vector2.Distance(transform.position, currentCheckpoint.transform.position); } }
 	public EnemyType Type { get { return enemyType; } }
-	public int Health { get { return currentHealth; } }
-	public float MoveSpeed { get { return currentMoveSpeed; } }
+	public float CurrentHealth { get { return currentHealth; } }
+	public float CurrentMoveSpeed { get { return currentMoveSpeed; } }
 
 	// Start is called before the first frame update
 	void Start()
@@ -54,13 +54,78 @@ public class Enemy : MonoBehaviour
 		GetComponent<SpriteRenderer>().sprite = EnemyManager.instance.EnemyInfo[enemyType].Sprite;
 	}
 
+	/// <summary>
+	/// Process the enemy while it is in the scene
+	/// </summary>
 	private void Process()
 	{
 		currentMoveSpeed = EnemyManager.instance.EnemyInfo[enemyType].MoveSpeed;
 
 		ProcessAfflictions();
 
+		// If the enemy is currently selected, update the UI of its stats
+		if(BuildManager.instance.CurrentSelection == gameObject)
+			UIManager.instance.UpdateSelectedObjectUI(gameObject);
+
 		Move();
+	}
+
+	/// <summary>
+	/// Adds an affliction to the enemy
+	/// </summary>
+	/// <param name="affliction">The Affliction object that is now affecting the enemy</param>
+	public void AddAffliction(Affliction affliction)
+	{
+		if(affliction == null)
+			return;
+
+		int index = afflictions.IndexOf(affliction);
+
+		// If the enemy already has this affliction, reset it
+		if(index != -1)
+			afflictions[index].Reset();
+		else
+			afflictions.Add(affliction);
+	}
+
+	/// <summary>
+	/// Process any afflictions the enemy has
+	/// </summary>
+	private void ProcessAfflictions()
+	{
+		// Loop through each affliction
+		for(int i = 0; i < afflictions.Count; i++)
+		{
+			afflictions[i].Process();
+
+			// If the affliction is active
+			if(afflictions[i].CurrentDuration > 0.0f)
+			{
+				// Process the affliction based on its type
+				switch(afflictions[i].Type)
+				{
+					case AfflictionType.DamageOverTime:
+						DamageOverTime dotAffliction = (DamageOverTime)afflictions[i];
+						if(dotAffliction.HasProc)
+						{
+							dotAffliction.Proc();
+							TakeDamage(dotAffliction.Damage);
+						}
+						break;
+					case AfflictionType.Slow:
+						Slow slowAffliction = (Slow)afflictions[i];
+						currentMoveSpeed *= (1 - slowAffliction.SlowAmount);
+						break;
+				}
+			}
+			// If the affliction has ended
+			else
+			{
+				// Remove it and check the next one
+				afflictions.RemoveAt(i);
+				i--;
+			}
+		}
 	}
 
 	/// <summary>
@@ -105,9 +170,7 @@ public class Enemy : MonoBehaviour
 			// Damage the base
 			GameManager.instance.UpdateHealth(-EnemyManager.instance.EnemyInfo[enemyType].Damage);
 
-			// Delete the enenmy and update the wave
-			EnemyManager.instance.CurrentWave.EnemyRemoved();
-			Destroy(gameObject);
+			DeleteEnemy();
 		}
 	}
 
@@ -115,49 +178,30 @@ public class Enemy : MonoBehaviour
 	/// Deals damage to the enemy
 	/// </summary>
 	/// <param name="amount">The amount of damage being dealt to the enemy</param>
-	public void TakeDamage(int amount)
+	public void TakeDamage(float amount)
 	{
 		currentHealth -= amount;
 
-		if(BuildManager.instance.CurrentSelection == gameObject)
-			UIManager.instance.UpdateSelectedObjectUI(gameObject);
-
-		if(currentHealth <= 0)
+		if(currentHealth <= 0.0f)
 		{
-			// If the player is currently selecting the enemy, deselect it
-			if(BuildManager.instance.CurrentSelection == gameObject)
-				BuildManager.instance.Select(null);
-
 			// Give the player the bounty for killing the enemy
 			GameManager.instance.UpdateMoney(EnemyManager.instance.EnemyInfo[enemyType].GoldWorth);
 
-			// Delete the enenmy and update the wave
-			EnemyManager.instance.CurrentWave.EnemyRemoved();
-			Destroy(gameObject);
+			DeleteEnemy();
 		}
 	}
 
-	private void ProcessAfflictions()
+	/// <summary>
+	/// Deletes the enemy from the scene
+	/// </summary>
+	private void DeleteEnemy()
 	{
-		for(int i = 0; i < afflictions.Count; i++)
-		{
-			if(afflictions[i].Duration > 0.0f)
-			{
-				switch(afflictions[i].Type)
-				{
-					case AfflictionType.DamageOverTime:
-						break;
-					case AfflictionType.Slow:
-						Slow slowAffliction = (Slow)afflictions[i];
-						currentMoveSpeed *= slowAffliction.SlowAmount;
-						break;
-				}
-			}
-			else
-			{
-				afflictions.RemoveAt(i);
-				i--;
-			}
-		}
+		// If the player is currently selecting the enemy, deselect it
+		if(BuildManager.instance.CurrentSelection == gameObject)
+			BuildManager.instance.Select(null);
+
+		// Delete the enenmy and update the wave
+		EnemyManager.instance.CurrentWave.EnemyRemoved();
+		Destroy(gameObject);
 	}
 }

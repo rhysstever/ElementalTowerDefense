@@ -179,8 +179,7 @@ public class UIManager : MonoBehaviour
 				case "Tower":
 					// Show everything but the 4th text element
 					for(int i = 0; i < selectedObjectPanel.transform.childCount; i++)
-						if(i != 4)
-							selectedObjectPanel.transform.GetChild(i).gameObject.SetActive(true);
+						selectedObjectPanel.transform.GetChild(i).gameObject.SetActive(true);
 
 					TowerType towerType = selectedGameObj.GetComponent<Tower>().Type;
 					TowerInfo towerInfo = TowerManager.instance.TowerInfo[towerType];
@@ -190,6 +189,7 @@ public class UIManager : MonoBehaviour
 					selectedObjectPanel.transform.GetChild(1).GetComponent<TMP_Text>().text = towerInfo.GetDamageText();
 					selectedObjectPanel.transform.GetChild(2).GetComponent<TMP_Text>().text = towerInfo.GetAttackSpeedText();
 					selectedObjectPanel.transform.GetChild(3).GetComponent<TMP_Text>().text = towerInfo.GetRangeText();
+					selectedObjectPanel.transform.GetChild(4).GetComponent<TMP_Text>().text = towerInfo.GetAfflictionText();
 					break;
 				case "Enemy":
 					// Show everything but the sell button
@@ -202,8 +202,8 @@ public class UIManager : MonoBehaviour
 
 					// Set stat texts
 					selectedObjectPanel.transform.GetChild(0).GetComponent<TMP_Text>().text = enemy.Type + " Enemy";
-					selectedObjectPanel.transform.GetChild(1).GetComponent<TMP_Text>().text = "Health: " + enemy.Health + "/" + enemyInfo.Health;
-					selectedObjectPanel.transform.GetChild(2).GetComponent<TMP_Text>().text = "Speed: " + enemy.MoveSpeed;
+					selectedObjectPanel.transform.GetChild(1).GetComponent<TMP_Text>().text = "Health: " + enemy.CurrentHealth + "/" + enemyInfo.Health;
+					selectedObjectPanel.transform.GetChild(2).GetComponent<TMP_Text>().text = "Speed: " + (enemy.CurrentMoveSpeed * 100);
 					selectedObjectPanel.transform.GetChild(3).GetComponent<TMP_Text>().text = enemyInfo.GetDamageText();
 					selectedObjectPanel.transform.GetChild(4).GetComponent<TMP_Text>().text = enemyInfo.GetBountyText();
 					break;
@@ -230,6 +230,7 @@ public class UIManager : MonoBehaviour
 		typeInfoSubPanel.transform.GetChild(2).GetComponent<TMP_Text>().text = towerInfo.GetDamageText();
 		typeInfoSubPanel.transform.GetChild(3).GetComponent<TMP_Text>().text = towerInfo.GetAttackSpeedText();
 		typeInfoSubPanel.transform.GetChild(4).GetComponent<TMP_Text>().text = towerInfo.GetRangeText();
+		typeInfoSubPanel.transform.GetChild(5).GetComponent<TMP_Text>().text = towerInfo.GetAfflictionText();
 	}
 
 	/// <summary>

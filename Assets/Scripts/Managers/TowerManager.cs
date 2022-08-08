@@ -12,10 +12,10 @@ public enum TowerType
 	Water,
 
 	// Tier 2 - single elemet
-	Earthquake,
-	Flamethrower,
+	Blaze,
 	Tornado,
 	Tsunami,
+	Quake,
 
 	// Tier 2 - double element
 	Blizzard,
@@ -103,49 +103,74 @@ public class TowerManager : MonoBehaviour
 	{
 		towerInfo = new Dictionary<TowerType, TowerInfo>();
 
+		#region Affliction Setup
+		DamageOverTime fireAffliction = new DamageOverTime("Burn", 2.0f, 0.5f, 0.5f);
+		Slow waterAffliction = new Slow("Soak", 2.0f, 0.3f);
+
+		Slow tsunamiAffliction = new Slow("Soak 2", 3.0f, 0.5f);
+		DamageOverTime blazeAffliction = new DamageOverTime("Burn 2", 3.0f, 1.0f, 0.5f);
+
+		Slow blizzardAffliction = new Slow("Frost", 1.0f, 0.8f);
+		Slow floodAffliction = new Slow("Drown", 2.0f, 0.3f);
+		DamageOverTime volcanoAffliction = new DamageOverTime("Smolder", 4.0f, 0.5f, 0.5f);
+		DamageOverTime wildfireAffliction = new DamageOverTime("Scorch", 1.0f, 0.25f, 0.25f);
+		#endregion
+
 		#region TowerInfo for each element
 		// Calculations:
 		// DPS* = Damage / sec
 		// CPDPS = Cost / DPS*
 		// 
-		// *Fire tower's fire dps affliction is denoted (+#)
+		// *Fire towers' fire dps affliction is denoted (+#)
 
 		// Tier 1
 		towerInfo.Add(TowerType.Air,
-			new TowerInfo(towerSprites[TowerType.Air], bulletSprites[TowerType.Air], 30, 1, 0.5f, 8.0f, false));	// DPS: 2 | CPDPS: 15
+			new TowerInfo(towerSprites[TowerType.Air], bulletSprites[TowerType.Air], 
+				30, 1, 0.5f, 8.0f, false, null));	// DPS: 2 | CPDPS: 15
 		towerInfo.Add(TowerType.Earth,
-			new TowerInfo(towerSprites[TowerType.Earth], bulletSprites[TowerType.Earth], 40, 5, 2.0f, 2.5f, true)); // DPS: 2.5 | CPDPS: 16
+			new TowerInfo(towerSprites[TowerType.Earth], bulletSprites[TowerType.Earth], 
+				40, 5, 2.0f, 2.5f, true, null)); // DPS: 2.5 | CPDPS: 16
 		towerInfo.Add(TowerType.Fire,
-			new TowerInfo(towerSprites[TowerType.Fire], bulletSprites[TowerType.Fire], 40, 2, 1.5f, 4.0f, false)); // DPS: 2 (+0.5) | CPDPS: 16
+			new TowerInfo(towerSprites[TowerType.Fire], bulletSprites[TowerType.Fire], 
+				40, 2, 1.5f, 4.0f, false, fireAffliction)); // DPS: 2 (+0.5) | CPDPS: 16
 		towerInfo.Add(TowerType.Water,
-			new TowerInfo(towerSprites[TowerType.Water], bulletSprites[TowerType.Water], 30, 2, 1.25f, 5.0f, false)); // DPS: 1.6 | CPDPS: 18.75, with slow
+			new TowerInfo(towerSprites[TowerType.Water], bulletSprites[TowerType.Water], 
+				30, 2, 1.25f, 5.0f, false, waterAffliction)); // DPS: 1.6 | CPDPS: 18.75, with slow
 
 		// Tier 2 - one element (x2)
 		towerInfo.Add(TowerType.Tornado,
-			new TowerInfo(towerSprites[TowerType.Tornado], bulletSprites[TowerType.Air], 140, 2, 0.33f, 8.0f, false)); // DPS: 6.06 | CPDPS: 23.1
-		towerInfo.Add(TowerType.Earthquake,
-			new TowerInfo(towerSprites[TowerType.Earthquake], bulletSprites[TowerType.Earth], 150, 10, 1.5f, 3.5f, true)); // DPS: 6.66 | CPDPS: 22.5
-		towerInfo.Add(TowerType.Flamethrower,
-			new TowerInfo(towerSprites[TowerType.Flamethrower], bulletSprites[TowerType.Fire], 120, 5, 1.0f, 5.0f, false)); // DPS: 5 (+1) | CPDPS: 24
+			new TowerInfo(towerSprites[TowerType.Tornado], bulletSprites[TowerType.Air], 
+				140, 2, 0.33f, 8.0f, false, null)); // DPS: 6.06 | CPDPS: 23.1
+		towerInfo.Add(TowerType.Quake,
+			new TowerInfo(towerSprites[TowerType.Quake], bulletSprites[TowerType.Earth], 
+				150, 10, 1.5f, 3.5f, true, null)); // DPS: 6.66 | CPDPS: 22.5
+		towerInfo.Add(TowerType.Blaze,
+			new TowerInfo(towerSprites[TowerType.Blaze], bulletSprites[TowerType.Fire], 
+				120, 5, 1.0f, 5.0f, false, blazeAffliction)); // DPS: 5 (+1) | CPDPS: 24
 		towerInfo.Add(TowerType.Tsunami,
-			new TowerInfo(towerSprites[TowerType.Tsunami], bulletSprites[TowerType.Water], 100, 4, 1.0f, 6.0f, false)); // DPS: 4 | CPDPS: 25, with slow
+			new TowerInfo(towerSprites[TowerType.Tsunami], bulletSprites[TowerType.Water], 
+				100, 4, 1.0f, 6.0f, false, tsunamiAffliction)); // DPS: 4 | CPDPS: 25, with slow
 
 		// Tier 2 - two elements (combo)
 		towerInfo.Add(TowerType.Blizzard,
-			new TowerInfo(towerSprites[TowerType.Blizzard], bulletSprites[TowerType.Air], 130, 3, 0.6f, 6.0f, false)); // DPS: 5 | CPDPS: 26, with slow
+			new TowerInfo(towerSprites[TowerType.Blizzard], bulletSprites[TowerType.Air], 
+				130, 3, 0.6f, 6.0f, false, blizzardAffliction)); // DPS: 5 | CPDPS: 26, with slow
 		towerInfo.Add(TowerType.Flood,
-			new TowerInfo(towerSprites[TowerType.Flood], bulletSprites[TowerType.Water], 110, 5, 1.25f, 4.0f, true)); // DPS: 4 | CPDPS: 27.5, with slow
+			new TowerInfo(towerSprites[TowerType.Flood], bulletSprites[TowerType.Water], 
+				110, 5, 1.25f, 4.0f, true, floodAffliction)); // DPS: 4 | CPDPS: 27.5, with slow
 		towerInfo.Add(TowerType.Volcano,
-			new TowerInfo(towerSprites[TowerType.Volcano], bulletSprites[TowerType.Earth], 120, 6, 1.5f, 3.5f, true)); // DPS: 4 (+0.5) | CPDPS: 26.66
+			new TowerInfo(towerSprites[TowerType.Volcano], bulletSprites[TowerType.Earth], 
+				120, 6, 1.5f, 3.5f, true, volcanoAffliction)); // DPS: 4 (+0.5) | CPDPS: 26.66
 		towerInfo.Add(TowerType.Wildfire,
-			new TowerInfo(towerSprites[TowerType.Wildfire], bulletSprites[TowerType.Fire], 150, 3, 0.5f, 6.0f, false)); // DPS: 6 (+0.5) | CPDPS: 23.07
+			new TowerInfo(towerSprites[TowerType.Wildfire], bulletSprites[TowerType.Fire], 
+				150, 3, 0.5f, 6.0f, false, wildfireAffliction)); // DPS: 6 (+0.5) | CPDPS: 23.07
 		#endregion
 
 		#region Upgrades
 		// Tier 2 - single element 
 		towerInfo[TowerType.Air].AddUpgrade(TowerType.Air, TowerType.Tornado);
-		towerInfo[TowerType.Earth].AddUpgrade(TowerType.Earth, TowerType.Earthquake);
-		towerInfo[TowerType.Fire].AddUpgrade(TowerType.Fire, TowerType.Flamethrower);
+		towerInfo[TowerType.Earth].AddUpgrade(TowerType.Earth, TowerType.Quake);
+		towerInfo[TowerType.Fire].AddUpgrade(TowerType.Fire, TowerType.Blaze);
 		towerInfo[TowerType.Water].AddUpgrade(TowerType.Water, TowerType.Tsunami);
 
 		// Tier 2 - double element

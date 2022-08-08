@@ -119,11 +119,11 @@ public class EnemyManager : MonoBehaviour
 
 		// Create Enemies
 		enemyInfo.Add(EnemyType.Normal,
-			new EnemyInfo(enemySprites[EnemyType.Normal], 5, 5, 5, 2.0f));
+			new EnemyInfo(enemySprites[EnemyType.Normal], 5.0f, 2.0f, 5, 5));
 		enemyInfo.Add(EnemyType.Tanky,
-			new EnemyInfo(enemySprites[EnemyType.Tanky], 15, 10, 10, 1.0f));
+			new EnemyInfo(enemySprites[EnemyType.Tanky], 15.0f, 1.0f, 10, 10));
 		enemyInfo.Add(EnemyType.Speedy,
-			new EnemyInfo(enemySprites[EnemyType.Speedy], 3, 2, 2, 4.0f));
+			new EnemyInfo(enemySprites[EnemyType.Speedy], 3.0f, 4.0f, 2, 2));
 	}
 
 	/// <summary>

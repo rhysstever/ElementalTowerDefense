@@ -5,12 +5,10 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
 	private float moveSpeed;
-	private GameObject tower;
 	private int damage;
-	private GameObject targetEnemy;
+	private Affliction affliction;
 
-	// Properties
-	public int Damage { get { return damage; } }
+	private GameObject targetEnemy;
 
 	// Start is called before the first frame update
 	void Start()
@@ -29,8 +27,11 @@ public class Bullet : MonoBehaviour
 		// If the bullet hit its target enemy object
 		if(collision.gameObject == targetEnemy)
 		{
+			// Add the bullet's affliction to the enemy
+			targetEnemy.GetComponent<Enemy>().AddAffliction(affliction);
+
 			// Deal damage to the enemy
-			targetEnemy.GetComponent<Enemy>().TakeDamage(Damage);
+			targetEnemy.GetComponent<Enemy>().TakeDamage(damage);
 
 			// Destroy this bullet
 			Destroy(gameObject);
@@ -46,14 +47,14 @@ public class Bullet : MonoBehaviour
 	{
 		if(tower.tag == "Tower")
 		{
-			this.tower = tower;
 			TowerInfo towerInfo = TowerManager.instance.TowerInfo[tower.GetComponent<Tower>().Type];
 
 			// Set the sprite of the bullet
 			GetComponent<SpriteRenderer>().sprite = towerInfo.BulletSprite;
 
-			// Calculate the damage of the bullet based on the tower
+			// Store the damage & affliction of the bullet based on the tower
 			damage = towerInfo.Damage;
+			affliction = towerInfo.Affliction;
 		}
 
 		if(enemy.tag == "Enemy")
