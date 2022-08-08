@@ -27,8 +27,6 @@ public class EnemyInfo
 		this.moveSpeed = moveSpeed;
 	}
 
-	public string GetHealthText() { return "Health: " + health; }
 	public string GetDamageText() { return "Damage: " + damage; }
 	public string GetBountyText() { return "Bounty: " + goldWorth; }
-	public string GetSpeedText() { return "Speed: " + MoveSpeed; }
 }

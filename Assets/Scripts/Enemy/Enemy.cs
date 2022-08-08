@@ -6,15 +6,22 @@ public class Enemy : MonoBehaviour
 {
 	public GameObject currentCheckpoint;
 	private EnemyType enemyType;
-	private int health;	// Needs to be tracked since health per individual enemy will differ
+
+	// Need to be tracked since per enemy values will differ
+	private int currentHealth; 
+	private float currentMoveSpeed;
+	private List<Affliction> afflictions;
 
 	public float DistToCP { get { return Vector2.Distance(transform.position, currentCheckpoint.transform.position); } }
 	public EnemyType Type { get { return enemyType; } }
+	public int Health { get { return currentHealth; } }
+	public float MoveSpeed { get { return currentMoveSpeed; } }
 
 	// Start is called before the first frame update
 	void Start()
 	{
 		currentCheckpoint = MapManager.instance.Checkpoints[1];
+		afflictions = new List<Affliction>();
 	}
 
 	// Update is called once per frame
@@ -25,7 +32,7 @@ public class Enemy : MonoBehaviour
 
 	void FixedUpdate()
 	{
-		Move();
+		Process();
 	}
 
 	private void OnCollisionEnter2D(Collision2D collision)
@@ -43,8 +50,17 @@ public class Enemy : MonoBehaviour
 	public void SetType(EnemyType type)
 	{
 		enemyType = type;
-		health = EnemyManager.instance.EnemyInfo[enemyType].Health;
+		currentHealth = EnemyManager.instance.EnemyInfo[enemyType].Health;
 		GetComponent<SpriteRenderer>().sprite = EnemyManager.instance.EnemyInfo[enemyType].Sprite;
+	}
+
+	private void Process()
+	{
+		currentMoveSpeed = EnemyManager.instance.EnemyInfo[enemyType].MoveSpeed;
+
+		ProcessAfflictions();
+
+		Move();
 	}
 
 	/// <summary>
@@ -72,7 +88,7 @@ public class Enemy : MonoBehaviour
 		transform.position += EnemyManager.instance.CalculateMovement(
 			transform.position,
 			currentCheckpoint.transform.position,
-			EnemyManager.instance.EnemyInfo[enemyType].MoveSpeed);
+			currentMoveSpeed);
 	}
 
 	/// <summary>
@@ -101,15 +117,47 @@ public class Enemy : MonoBehaviour
 	/// <param name="amount">The amount of damage being dealt to the enemy</param>
 	public void TakeDamage(int amount)
 	{
-		health -= amount;
+		currentHealth -= amount;
 
-		if(health <= 0)
+		if(BuildManager.instance.CurrentSelection == gameObject)
+			UIManager.instance.UpdateSelectedObjectUI(gameObject);
+
+		if(currentHealth <= 0)
 		{
+			// If the player is currently selecting the enemy, deselect it
+			if(BuildManager.instance.CurrentSelection == gameObject)
+				BuildManager.instance.Select(null);
+
+			// Give the player the bounty for killing the enemy
 			GameManager.instance.UpdateMoney(EnemyManager.instance.EnemyInfo[enemyType].GoldWorth);
 
 			// Delete the enenmy and update the wave
 			EnemyManager.instance.CurrentWave.EnemyRemoved();
 			Destroy(gameObject);
+		}
+	}
+
+	private void ProcessAfflictions()
+	{
+		for(int i = 0; i < afflictions.Count; i++)
+		{
+			if(afflictions[i].Duration > 0.0f)
+			{
+				switch(afflictions[i].Type)
+				{
+					case AfflictionType.DamageOverTime:
+						break;
+					case AfflictionType.Slow:
+						Slow slowAffliction = (Slow)afflictions[i];
+						currentMoveSpeed *= slowAffliction.SlowAmount;
+						break;
+				}
+			}
+			else
+			{
+				afflictions.RemoveAt(i);
+				i--;
+			}
 		}
 	}
 }

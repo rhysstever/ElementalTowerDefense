@@ -197,15 +197,15 @@ public class UIManager : MonoBehaviour
 						if(selectedObjectPanel.transform.GetChild(i).gameObject != sellTowerButton)
 							selectedObjectPanel.transform.GetChild(i).gameObject.SetActive(true);
 
-					EnemyType enemyType = selectedGameObj.GetComponent<Enemy>().Type;
-					EnemyInfo enemyInfo = EnemyManager.instance.EnemyInfo[enemyType];
+					Enemy enemy = selectedGameObj.GetComponent<Enemy>();
+					EnemyInfo enemyInfo = EnemyManager.instance.EnemyInfo[enemy.Type];
 
 					// Set stat texts
-					selectedObjectPanel.transform.GetChild(0).GetComponent<TMP_Text>().text = enemyType + " Enemy";
-					selectedObjectPanel.transform.GetChild(1).GetComponent<TMP_Text>().text = enemyInfo.GetHealthText();
-					selectedObjectPanel.transform.GetChild(2).GetComponent<TMP_Text>().text = enemyInfo.GetDamageText();
-					selectedObjectPanel.transform.GetChild(3).GetComponent<TMP_Text>().text = enemyInfo.GetBountyText();
-					selectedObjectPanel.transform.GetChild(4).GetComponent<TMP_Text>().text = enemyInfo.GetSpeedText();
+					selectedObjectPanel.transform.GetChild(0).GetComponent<TMP_Text>().text = enemy.Type + " Enemy";
+					selectedObjectPanel.transform.GetChild(1).GetComponent<TMP_Text>().text = "Health: " + enemy.Health + "/" + enemyInfo.Health;
+					selectedObjectPanel.transform.GetChild(2).GetComponent<TMP_Text>().text = "Speed: " + enemy.MoveSpeed;
+					selectedObjectPanel.transform.GetChild(3).GetComponent<TMP_Text>().text = enemyInfo.GetDamageText();
+					selectedObjectPanel.transform.GetChild(4).GetComponent<TMP_Text>().text = enemyInfo.GetBountyText();
 					break;
 				default:
 					selectedObjectPanel.SetActive(false);
