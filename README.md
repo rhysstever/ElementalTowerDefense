@@ -18,6 +18,10 @@ Visit http://rhysstever.me/TowerDefense2D/ to play in browser. A downloadable .e
 | Quake | Earth + Earth | Larger range/AOE |
 | Blaze | Fire + Fire | DoT lasts longer and deals more damage |
 | Tsunami | Water + Water | Slow is stronger and lasts longer |
+| Blizard | Air + Water | Desc | 
+| Flood | Water + Earth | Desc |
+| Volcano | Earth + Fire | Desc |
+| Wildfire | Fire + Air | Desc |
 
 ## Enemies
 
