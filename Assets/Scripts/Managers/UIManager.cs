@@ -98,7 +98,7 @@ public class UIManager : MonoBehaviour
 		// Menu buttons
 		playButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.Game));
 		mainMenuToControlsButton.GetComponent<Button>().onClick.AddListener(() => OpenControlsMenu(MenuState.MainMenu));
-		quitButton.GetComponent<Button>().onClick.AddListener(() => Application.Quit());
+		quitButton.GetComponent<Button>().onClick.AddListener(() => QuitGame());
 		pauseGameButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.Pause));
 		resumeButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.Game));
 		pauseToControlsButton.GetComponent<Button>().onClick.AddListener(() => OpenControlsMenu(MenuState.Pause));
@@ -319,5 +319,15 @@ public class UIManager : MonoBehaviour
 	public void UpdateGameEndText(bool hasWon)
 	{
 		gameEndHeaderText.GetComponent<TMP_Text>().text = hasWon ? "Game Won! \nAll Waves Cleared" : "Game Over!";
+	}
+
+	/// <summary>
+	/// Quits the application
+	/// </summary>
+	private void QuitGame()
+	{
+		// Quits the game unless the game is running on web gl
+		if(Application.platform != RuntimePlatform.WebGLPlayer)
+			Application.Quit();
 	}
 }
