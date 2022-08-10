@@ -46,7 +46,7 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: StaticMapObjects
+  - name: Tiles
     uniqueID: 691658125
     locked: 0
   - name: Bullets
@@ -57,4 +57,7 @@ TagManager:
     locked: 0
   - name: Enemies
     uniqueID: 2490289977
+    locked: 0
+  - name: Checkpoints
+    uniqueID: 2741471339
     locked: 0

@@ -318,6 +318,6 @@ public class UIManager : MonoBehaviour
 	/// <param name="hasWon"></param>
 	public void UpdateGameEndText(bool hasWon)
 	{
-		gameEndHeaderText.GetComponent<TMP_Text>().text = hasWon ? "Game Won" : "Game Over";
+		gameEndHeaderText.GetComponent<TMP_Text>().text = hasWon ? "Game Won! \nAll Waves Cleared" : "Game Over!";
 	}
 }

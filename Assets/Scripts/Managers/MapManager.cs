@@ -28,7 +28,7 @@ public class MapManager : MonoBehaviour
 	[SerializeField]    // Object parents
 	private GameObject checkpointsParent, tilesParent;
 	[SerializeField]    // Map Prefabs
-	private GameObject tilePrefab, checkpointPrefab;
+	private GameObject tilePrefab, spawnerPrefab, checkpointPrefab, basePrefab;
 
 	private float xOffset, yOffset;
 	private Vector2 startingPos;
@@ -144,8 +144,15 @@ public class MapManager : MonoBehaviour
 	/// <returns>A checkpoint, newly created in the scene</returns>
 	private GameObject CreateCheckpoint(Vector2 position, int checkpointNumber)
 	{
+		// Determine the type of checkpoint needed
+		GameObject prefab = checkpointPrefab;
+		if(checkpointNumber == 0)
+			prefab = spawnerPrefab;
+		else if(checkpointNumber == checkpoints.Length - 1)
+			prefab = basePrefab;
+
 		// Create the checkpoint
-		GameObject newCheckpoint = Instantiate(checkpointPrefab, position, Quaternion.identity, checkpointsParent.transform);
+		GameObject newCheckpoint = Instantiate(prefab, position, Quaternion.identity, checkpointsParent.transform);
 		newCheckpoint.name = "checkpoint" + checkpointNumber;
 		checkpoints[checkpointNumber] = newCheckpoint;
 
