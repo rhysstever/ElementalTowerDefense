@@ -177,7 +177,7 @@ public class EnemyManager : MonoBehaviour
 
 		// Create the enemy in the scene
 		GameObject newEnemy = Instantiate(enemyPrefab, startingPos, Quaternion.identity, enemyParent.transform);
-		
+
 		// Set the game object's name in the scene and its stats
 		newEnemy.name = "enemy" + (currentWave.EnemiesSpawned + 1);
 		newEnemy.GetComponent<Enemy>().SetType(currentWave.EnemyType);

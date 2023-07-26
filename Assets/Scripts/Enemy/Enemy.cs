@@ -44,7 +44,7 @@ public class Enemy : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Set the type of enemy the object is
+	/// Sets the type of the enemy
 	/// </summary>
 	/// <param name="enemyInfo">The type of enemy</param>
 	public void SetType(EnemyType type)
