@@ -46,7 +46,7 @@ public class Tower : MonoBehaviour
 
 	void FixedUpdate()
 	{
-		if(tile != null
+		if(tile != null	// A tower that is actually built
 			&& GameManager.instance.CurrentMenuState == MenuState.Game)
 		{
 			// Increments timer
@@ -55,7 +55,7 @@ public class Tower : MonoBehaviour
 			// The timer is up, try to shoot
 			if(attackTimer >= TowerManager.instance.TowerInfo[type].AttackSpeed)
 			{
-				if(TowerManager.instance.TowerInfo[type].AOE)
+				if(TowerManager.instance.TowerInfo[type].HasAOE)
 					foreach(GameObject enemy in inRangeEnemies)
 						Shoot(enemy);
 				else

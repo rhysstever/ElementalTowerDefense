@@ -108,6 +108,9 @@ public class BuildManager : MonoBehaviour
 		if(!CanBuild(type))
 			return;
 
+		// Remove the cost from the player
+		GameManager.instance.UpdateMoney(-TowerManager.instance.TowerInfo[type].Cost);
+
 		// Create the tower
 		GameObject newTower = CreateTower(type);
 
@@ -130,13 +133,19 @@ public class BuildManager : MonoBehaviour
 		// Check if the upgrade exists
 		TowerType baseType = currentSelection.GetComponent<Tower>().Type;
 		if(!TowerManager.instance.TowerInfo[baseType].Upgrades.ContainsKey(type))
+		{
+			Debug.Log("Upgrade does not exist!");
 			return false;
+		}
 
 		// Check if the player has enough money
 		TowerType upgradeType = TowerManager.instance.TowerInfo[baseType].Upgrades[type];
 		int cost = TowerManager.instance.TowerInfo[upgradeType].Cost;
 		if(GameManager.instance.Money < cost)
+		{
+			Debug.Log("Not enough money! " + cost + " needed.");
 			return false;
+		}
 
 		return true;
 	}
@@ -153,6 +162,10 @@ public class BuildManager : MonoBehaviour
 
 		TowerType baseType = currentSelection.GetComponent<Tower>().Type;
 		TowerType upgradeType = TowerManager.instance.TowerInfo[baseType].Upgrades[type];
+
+		// Remove the remaining cost from the player based on what is already built
+		int remainingCost = TowerManager.instance.TowerInfo[upgradeType].Cost - TowerManager.instance.TowerInfo[baseType].Cost;
+		GameManager.instance.UpdateMoney(-remainingCost);
 
 		// Create the upgraded tower
 		GameObject newTower = CreateTower(upgradeType);
@@ -179,9 +192,6 @@ public class BuildManager : MonoBehaviour
 	/// <returns>The created tower game object</returns>
 	private GameObject CreateTower(TowerType type)
 	{
-		// Remove the cost from the player
-		GameManager.instance.UpdateMoney(-TowerManager.instance.TowerInfo[type].Cost);
-
 		// Create the tower 
 		GameObject newTower = Instantiate(
 			TowerManager.instance.TowerPrefab,

@@ -199,7 +199,7 @@ public class UIManager : MonoBehaviour
 						selectedObjectPanel.transform.GetChild(i).gameObject.SetActive(false);
 					break;
 				case "Tower":
-					// Show everything but the 4th text element
+					// Show everything
 					for(int i = 0; i < selectedObjectPanel.transform.childCount; i++)
 						selectedObjectPanel.transform.GetChild(i).gameObject.SetActive(true);
 
@@ -216,8 +216,12 @@ public class UIManager : MonoBehaviour
 				case "Enemy":
 					// Show everything but the sell button
 					for(int i = 0; i < selectedObjectPanel.transform.childCount; i++)
+					{
 						if(selectedObjectPanel.transform.GetChild(i).gameObject != sellTowerButton)
 							selectedObjectPanel.transform.GetChild(i).gameObject.SetActive(true);
+						else
+							selectedObjectPanel.transform.GetChild(i).gameObject.SetActive(false);
+					}
 
 					Enemy enemy = selectedGameObj.GetComponent<Enemy>();
 					EnemyInfo enemyInfo = EnemyManager.instance.EnemyInfo[enemy.Type];

@@ -22,7 +22,7 @@ public class TowerInfo
 	public int Damage { get { return damage; } }
 	public float AttackSpeed { get { return attackSpeed; } }
 	public float Range { get { return range; } }
-	public bool AOE { get { return hasAOE; } }
+	public bool HasAOE { get { return hasAOE; } }
 	public Affliction Affliction { get { return affliction; } }
 	public Dictionary<TowerType, TowerType> Upgrades { get { return upgrades; } }
 

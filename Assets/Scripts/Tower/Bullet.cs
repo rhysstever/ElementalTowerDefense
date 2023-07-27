@@ -13,7 +13,7 @@ public class Bullet : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		moveSpeed = 8.0f;
+		moveSpeed = 12.0f;
 	}
 
 	void FixedUpdate()
