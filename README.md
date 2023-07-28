@@ -3,9 +3,6 @@ Defend your base against waves of enemies with elemental towers!
 
 Build towers of the four base elements: water, earth, fire, and air. Each tower type provides unique properties and bonuses. Towers can be upgraded with itself or combined with another element. Try out different combinations and see if you can last all 10 waves!
 
-## How to Play
-Visit https://rhysstever.github.io/ElementalTowerDefense/ to play in browser. A downloadable .exe will be available in a later version.
-
 ## Towers
 
 | Name | Element(s) | Description |
