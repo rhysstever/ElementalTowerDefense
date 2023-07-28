@@ -32,12 +32,16 @@ public class UIManager : MonoBehaviour
 	private GameObject playButton, mainMenuToControlsButton, quitButton;
 	
 	// Game
-	[SerializeField]    // Text
+	[SerializeField]    // Player Text
 	private GameObject healthText, moneyText, waveText;
+	[SerializeField]    // Selected Object Text
+	private GameObject selectedGameObjHeader, selectedGameObjText1, selectedGameObjText2, selectedGameObjText3, selectedGameObjText4;
 	[SerializeField]    // Panels
 	private GameObject towerBuildPanel, selectedObjectPanel, typeInfoPanel, typeInfoSubPanel;
+	[SerializeField]    // Empty Parents
+	private GameObject selectedObjTextParent, selectedTowerButtonParent;
 	[SerializeField]    // Buttons
-	private GameObject openTowerPanelButton, closeTowerPanelButton, sellTowerButton, pauseGameButton;
+	private GameObject openTowerPanelButton, closeTowerPanelButton, sellTowerButton, towerTargetTypeButton, pauseGameButton;
 
 	// Pause
 	[SerializeField]
@@ -119,6 +123,10 @@ public class UIManager : MonoBehaviour
 		sellTowerButton.GetComponent<Button>().onClick.AddListener(
 			() => BuildManager.instance.Sell());
 
+		// Set tower target type button
+		towerTargetTypeButton.GetComponent<Button>().onClick.AddListener(
+			() => BuildManager.instance.CycleCurrentTowerTargetType());
+
 		// Set tower info buttons
 		foreach(Transform towerInfoButton in typeInfoPanel.transform.GetChild(2))
 			towerInfoButton.GetComponent<Button>().onClick.AddListener(
@@ -191,47 +199,48 @@ public class UIManager : MonoBehaviour
 			switch(selectedGameObj.tag)
 			{
 				case "Tile":
-					selectedObjectPanel.transform.GetChild(0).gameObject.SetActive(true);
-					selectedObjectPanel.transform.GetChild(0).GetComponent<TMP_Text>().text = "Tile";
+					selectedGameObjHeader.SetActive(true);
+					selectedGameObjHeader.GetComponent<TMP_Text>().text = "Tile";
 
 					// Hide everything else
 					for(int i = 1; i < selectedObjectPanel.transform.childCount; i++)
 						selectedObjectPanel.transform.GetChild(i).gameObject.SetActive(false);
 					break;
 				case "Tower":
-					// Show everything
-					for(int i = 0; i < selectedObjectPanel.transform.childCount; i++)
-						selectedObjectPanel.transform.GetChild(i).gameObject.SetActive(true);
+					// Show all text and buttons
+					selectedObjTextParent.SetActive(true);
+					selectedTowerButtonParent.SetActive(true);
 
-					TowerType towerType = selectedGameObj.GetComponent<Tower>().Type;
-					TowerInfo towerInfo = TowerManager.instance.TowerInfo[towerType];
+					Tower tower = selectedGameObj.GetComponent<Tower>();
+					TowerInfo towerInfo = TowerManager.instance.TowerInfo[tower.Type];
+					
+					// Set header and stat text
+					selectedGameObjHeader.GetComponent<TMP_Text>().text = tower.Type + " Tower";
+					selectedGameObjText1.GetComponent<TMP_Text>().text = towerInfo.GetDamageText();
+					selectedGameObjText2.GetComponent<TMP_Text>().text = towerInfo.GetAttackSpeedText();
+					selectedGameObjText3.GetComponent<TMP_Text>().text = towerInfo.GetRangeText();
+					selectedGameObjText4.GetComponent<TMP_Text>().text = towerInfo.GetAfflictionText();
 
-					// Set stat texts
-					selectedObjectPanel.transform.GetChild(0).GetComponent<TMP_Text>().text = towerType + " Tower";
-					selectedObjectPanel.transform.GetChild(1).GetComponent<TMP_Text>().text = towerInfo.GetDamageText();
-					selectedObjectPanel.transform.GetChild(2).GetComponent<TMP_Text>().text = towerInfo.GetAttackSpeedText();
-					selectedObjectPanel.transform.GetChild(3).GetComponent<TMP_Text>().text = towerInfo.GetRangeText();
-					selectedObjectPanel.transform.GetChild(4).GetComponent<TMP_Text>().text = towerInfo.GetAfflictionText();
+					// Set button text
+					sellTowerButton.GetComponentInChildren<TMP_Text>().text = "Sell for " + (towerInfo.Cost / 2);
+					towerTargetTypeButton.GetComponentInChildren<TMP_Text>().text = tower.TargetType.ToString();
 					break;
 				case "Enemy":
-					// Show everything but the sell button
-					for(int i = 0; i < selectedObjectPanel.transform.childCount; i++)
-					{
-						if(selectedObjectPanel.transform.GetChild(i).gameObject != sellTowerButton)
-							selectedObjectPanel.transform.GetChild(i).gameObject.SetActive(true);
-						else
-							selectedObjectPanel.transform.GetChild(i).gameObject.SetActive(false);
-					}
+					// Show all text
+					selectedObjTextParent.SetActive(true);
+
+					// Hide all tower buttons
+					selectedTowerButtonParent.SetActive(false);
 
 					Enemy enemy = selectedGameObj.GetComponent<Enemy>();
 					EnemyInfo enemyInfo = EnemyManager.instance.EnemyInfo[enemy.Type];
 
-					// Set stat texts
-					selectedObjectPanel.transform.GetChild(0).GetComponent<TMP_Text>().text = enemy.Type + " Enemy";
-					selectedObjectPanel.transform.GetChild(1).GetComponent<TMP_Text>().text = "Health: " + enemy.CurrentHealth + "/" + enemyInfo.Health;
-					selectedObjectPanel.transform.GetChild(2).GetComponent<TMP_Text>().text = "Speed: " + (enemy.CurrentMoveSpeed * 100);
-					selectedObjectPanel.transform.GetChild(3).GetComponent<TMP_Text>().text = enemyInfo.GetDamageText();
-					selectedObjectPanel.transform.GetChild(4).GetComponent<TMP_Text>().text = enemyInfo.GetBountyText();
+					// Set header and stat text
+					selectedGameObjHeader.GetComponent<TMP_Text>().text = enemy.Type + " Enemy";
+					selectedGameObjText1.GetComponent<TMP_Text>().text = "Health: " + enemy.CurrentHealth + "/" + enemyInfo.Health;
+					selectedGameObjText2.GetComponent<TMP_Text>().text = "Speed: " + (enemy.CurrentMoveSpeed * 100);
+					selectedGameObjText3.GetComponent<TMP_Text>().text = enemyInfo.GetDamageText();
+					selectedGameObjText4.GetComponent<TMP_Text>().text = enemyInfo.GetBountyText();
 					break;
 				default:
 					selectedObjectPanel.SetActive(false);

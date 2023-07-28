@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,6 +29,7 @@ public class Tower : MonoBehaviour
 		get { return tile; }
 		set { tile = value; }
 	}
+	public TargetType TargetType { get { return targetType; } }
 
 	// Start is called before the first frame update
 	void Start()
@@ -276,6 +278,18 @@ public class Tower : MonoBehaviour
 		}
 
 		return weakestEnemy;
+	}
+
+	/// <summary>
+	/// Cycles the target type of the tower
+	/// </summary>
+	public void CycleTargetType()
+	{
+		int nextTargetTypeIndex = (int)targetType + 1;
+		if(nextTargetTypeIndex >= Enum.GetValues(typeof(TargetType)).Length)
+			nextTargetTypeIndex = 0;
+
+		targetType = (TargetType)nextTargetTypeIndex;
 	}
 
 	/// <summary>

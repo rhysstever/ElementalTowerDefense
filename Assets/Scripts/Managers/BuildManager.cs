@@ -231,4 +231,17 @@ public class BuildManager : MonoBehaviour
 		Destroy(currentSelection.GetComponent<Tile>().Tower);
 		currentSelection.GetComponent<Tile>().Tower = null;
 	}
+
+	/// <summary>
+	/// Cycles the target type of the currently selected tower
+	/// </summary>
+	public void CycleCurrentTowerTargetType()
+	{
+		if(currentSelection != null
+			&& currentSelection.tag == "Tower")
+		{
+			currentSelection.GetComponent<Tower>().CycleTargetType();
+			UIManager.instance.UpdateSelectedObjectUI(currentSelection);
+		}
+	}
 }
