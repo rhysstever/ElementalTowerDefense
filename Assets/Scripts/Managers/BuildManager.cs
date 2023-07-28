@@ -160,18 +160,18 @@ public class BuildManager : MonoBehaviour
 		if(!CanUpgrade(type))
 			return;
 
-		TowerType baseType = currentSelection.GetComponent<Tower>().Type;
-		TowerType upgradeType = TowerManager.instance.TowerInfo[baseType].Upgrades[type];
+		Tower tower = currentSelection.GetComponent<Tower>();
+		TowerType upgradeType = TowerManager.instance.TowerInfo[tower.Type].Upgrades[type];
 
 		// Remove the remaining cost from the player based on what is already built
-		int remainingCost = TowerManager.instance.TowerInfo[upgradeType].Cost - TowerManager.instance.TowerInfo[baseType].Cost;
+		int remainingCost = TowerManager.instance.TowerInfo[upgradeType].Cost - TowerManager.instance.TowerInfo[tower.Type].Cost;
 		GameManager.instance.UpdateMoney(-remainingCost);
 
 		// Create the upgraded tower
 		GameObject newTower = CreateTower(upgradeType);
 
 		// Select the tile under the tower (temporarily)
-		Select(currentSelection.GetComponent<Tower>().Tile);
+		Select(tower.Tile);
 
 		// Destroy the base tower object
 		Destroy(currentSelection.GetComponent<Tile>().Tower);

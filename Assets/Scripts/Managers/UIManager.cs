@@ -29,31 +29,37 @@ public class UIManager : MonoBehaviour
 
 	// Main Menu
 	[SerializeField]
-	private GameObject playButton, mainMenuToControlsButton, quitButton;
+	private Button playButton, mainMenuToControlsButton, quitButton;
 	
 	// Game
 	[SerializeField]    // Player Text
 	private GameObject healthText, moneyText, waveText;
 	[SerializeField]    // Selected Object Text
-	private GameObject selectedGameObjHeader, selectedGameObjText1, selectedGameObjText2, selectedGameObjText3, selectedGameObjText4;
+	private GameObject selectedObjHeader, selectedObjText1, selectedObjText2, selectedObjText3, selectedObjText4;
+	[SerializeField]    // Tower Info Sub-Panel Text
+	private GameObject towerInfoTypeText, towerInfoCostText, towerInfoDamageText, towerInfoASText, towerInfoRangeText, towerInfoAfflictionText;
 	[SerializeField]    // Panels
 	private GameObject towerBuildPanel, selectedObjectPanel, typeInfoPanel, typeInfoSubPanel;
 	[SerializeField]    // Empty Parents
 	private GameObject selectedObjTextParent, selectedTowerButtonParent;
 	[SerializeField]    // Buttons
-	private GameObject openTowerPanelButton, closeTowerPanelButton, sellTowerButton, towerTargetTypeButton, pauseGameButton;
+	private Button openTowerPanelButton, closeTowerPanelButton, sellTowerButton, towerTargetTypeButton, pauseGameButton;
 
 	// Pause
 	[SerializeField]
-	private GameObject resumeButton, pauseToControlsButton, pauseToMainButton;
-	
+	private Button resumeButton, pauseToControlsButton, pauseToMainButton;
+
 	// Controls
 	[SerializeField]
-	private GameObject closeControlsButton, backButton, nextButton;
+	private GameObject controlsTextParent;
+	[SerializeField]	// Buttons
+	private Button closeControlsButton, backButton, nextButton;
 
 	// Game End
-	[SerializeField] 
-	private GameObject gameEndHeaderText, gameEndToMainButton;
+	[SerializeField]
+	private GameObject gameEndHeaderText;
+	[SerializeField]
+	private Button gameEndToMainButton;
 
 	private Dictionary<MenuState, GameObject> menuStateUIParents;
 	private MenuState menuStateBeforeControlsMenu;
@@ -100,18 +106,18 @@ public class UIManager : MonoBehaviour
 	private void SetupUI()
 	{
 		// Menu buttons
-		playButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.Game));
-		mainMenuToControlsButton.GetComponent<Button>().onClick.AddListener(() => OpenControlsMenu(MenuState.MainMenu));
-		quitButton.GetComponent<Button>().onClick.AddListener(() => QuitGame());
-		pauseGameButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.Pause));
-		resumeButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.Game));
-		pauseToControlsButton.GetComponent<Button>().onClick.AddListener(() => OpenControlsMenu(MenuState.Pause));
-		pauseToMainButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.MainMenu));
-		gameEndToMainButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.MainMenu));
+		playButton.onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.Game));
+		mainMenuToControlsButton.onClick.AddListener(() => OpenControlsMenu(MenuState.MainMenu));
+		quitButton.onClick.AddListener(() => QuitGame());
+		pauseGameButton.onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.Pause));
+		resumeButton.onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.Game));
+		pauseToControlsButton.onClick.AddListener(() => OpenControlsMenu(MenuState.Pause));
+		pauseToMainButton.onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.MainMenu));
+		gameEndToMainButton.onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.MainMenu));
 
 		// Tower info panel open/close buttons
-		openTowerPanelButton.GetComponent<Button>().onClick.AddListener(() => SetTowerPanelActive(true));
-		closeTowerPanelButton.GetComponent<Button>().onClick.AddListener(() => SetTowerPanelActive(false));
+		openTowerPanelButton.onClick.AddListener(() => SetTowerPanelActive(true));
+		closeTowerPanelButton.onClick.AddListener(() => SetTowerPanelActive(false));
 
 		// Set tower buy buttons
 		foreach(Transform buildTowerButton in towerBuildPanel.transform)
@@ -120,11 +126,11 @@ public class UIManager : MonoBehaviour
 					() => BuildManager.instance.Build(buildTowerButton.GetComponent<Tower>().Type));
 
 		// Set tower sell button
-		sellTowerButton.GetComponent<Button>().onClick.AddListener(
+		sellTowerButton.onClick.AddListener(
 			() => BuildManager.instance.Sell());
 
 		// Set tower target type button
-		towerTargetTypeButton.GetComponent<Button>().onClick.AddListener(
+		towerTargetTypeButton.onClick.AddListener(
 			() => BuildManager.instance.CycleCurrentTowerTargetType());
 
 		// Set tower info buttons
@@ -133,9 +139,9 @@ public class UIManager : MonoBehaviour
 				() => UpdateSelectedTypeInfoUI(towerInfoButton.GetComponent<Tower>().Type));
 
 		// Controls buttons
-		closeControlsButton.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.ChangeMenuState(menuStateBeforeControlsMenu));
-		nextButton.GetComponent<Button>().onClick.AddListener(() => NextControlsText());
-		backButton.GetComponent<Button>().onClick.AddListener(() => BackControlsText());
+		closeControlsButton.onClick.AddListener(() => GameManager.instance.ChangeMenuState(menuStateBeforeControlsMenu));
+		nextButton.onClick.AddListener(() => NextControlsText());
+		backButton.onClick.AddListener(() => BackControlsText());
 	}
 
 	/// <summary>
@@ -199,8 +205,8 @@ public class UIManager : MonoBehaviour
 			switch(selectedGameObj.tag)
 			{
 				case "Tile":
-					selectedGameObjHeader.SetActive(true);
-					selectedGameObjHeader.GetComponent<TMP_Text>().text = "Tile";
+					selectedObjHeader.SetActive(true);
+					selectedObjHeader.GetComponent<TMP_Text>().text = "Tile";
 
 					// Hide everything else
 					for(int i = 1; i < selectedObjectPanel.transform.childCount; i++)
@@ -213,13 +219,13 @@ public class UIManager : MonoBehaviour
 
 					Tower tower = selectedGameObj.GetComponent<Tower>();
 					TowerInfo towerInfo = TowerManager.instance.TowerInfo[tower.Type];
-					
+
 					// Set header and stat text
-					selectedGameObjHeader.GetComponent<TMP_Text>().text = tower.Type + " Tower";
-					selectedGameObjText1.GetComponent<TMP_Text>().text = towerInfo.GetDamageText();
-					selectedGameObjText2.GetComponent<TMP_Text>().text = towerInfo.GetAttackSpeedText();
-					selectedGameObjText3.GetComponent<TMP_Text>().text = towerInfo.GetRangeText();
-					selectedGameObjText4.GetComponent<TMP_Text>().text = towerInfo.GetAfflictionText();
+					selectedObjHeader.GetComponent<TMP_Text>().text = tower.Type + " Tower";
+					selectedObjText1.GetComponent<TMP_Text>().text = towerInfo.GetDamageText();
+					selectedObjText2.GetComponent<TMP_Text>().text = towerInfo.GetAttackSpeedText();
+					selectedObjText3.GetComponent<TMP_Text>().text = towerInfo.GetRangeText();
+					selectedObjText4.GetComponent<TMP_Text>().text = towerInfo.GetAfflictionText();
 
 					// Set button text
 					sellTowerButton.GetComponentInChildren<TMP_Text>().text = "Sell for " + (towerInfo.Cost / 2);
@@ -236,11 +242,11 @@ public class UIManager : MonoBehaviour
 					EnemyInfo enemyInfo = EnemyManager.instance.EnemyInfo[enemy.Type];
 
 					// Set header and stat text
-					selectedGameObjHeader.GetComponent<TMP_Text>().text = enemy.Type + " Enemy";
-					selectedGameObjText1.GetComponent<TMP_Text>().text = "Health: " + enemy.CurrentHealth + "/" + enemyInfo.Health;
-					selectedGameObjText2.GetComponent<TMP_Text>().text = "Speed: " + (enemy.CurrentMoveSpeed * 100);
-					selectedGameObjText3.GetComponent<TMP_Text>().text = enemyInfo.GetDamageText();
-					selectedGameObjText4.GetComponent<TMP_Text>().text = enemyInfo.GetBountyText();
+					selectedObjHeader.GetComponent<TMP_Text>().text = enemy.Type + " Enemy";
+					selectedObjText1.GetComponent<TMP_Text>().text = "Health: " + enemy.CurrentHealth + "/" + enemyInfo.Health;
+					selectedObjText2.GetComponent<TMP_Text>().text = "Speed: " + (enemy.CurrentMoveSpeed * 100);
+					selectedObjText3.GetComponent<TMP_Text>().text = enemyInfo.GetDamageText();
+					selectedObjText4.GetComponent<TMP_Text>().text = enemyInfo.GetBountyText();
 					break;
 				default:
 					selectedObjectPanel.SetActive(false);
@@ -260,12 +266,12 @@ public class UIManager : MonoBehaviour
 		TowerInfo towerInfo = TowerManager.instance.TowerInfo[selectedType];
 
 		typeInfoSubPanel.SetActive(true);
-		typeInfoSubPanel.transform.GetChild(0).GetComponent<TMP_Text>().text = selectedType + " Tower";
-		typeInfoSubPanel.transform.GetChild(1).GetComponent<TMP_Text>().text = towerInfo.GetCostText();
-		typeInfoSubPanel.transform.GetChild(2).GetComponent<TMP_Text>().text = towerInfo.GetDamageText();
-		typeInfoSubPanel.transform.GetChild(3).GetComponent<TMP_Text>().text = towerInfo.GetAttackSpeedText();
-		typeInfoSubPanel.transform.GetChild(4).GetComponent<TMP_Text>().text = towerInfo.GetRangeText();
-		typeInfoSubPanel.transform.GetChild(5).GetComponent<TMP_Text>().text = towerInfo.GetAfflictionText();
+		towerInfoTypeText.GetComponent<TMP_Text>().text = selectedType + " Tower";
+		towerInfoCostText.GetComponent<TMP_Text>().text = towerInfo.GetCostText();
+		towerInfoDamageText.GetComponent<TMP_Text>().text = towerInfo.GetDamageText();
+		towerInfoASText.GetComponent<TMP_Text>().text = towerInfo.GetAttackSpeedText();
+		towerInfoRangeText.GetComponent<TMP_Text>().text = towerInfo.GetRangeText();
+		towerInfoAfflictionText.GetComponent<TMP_Text>().text = towerInfo.GetAfflictionText();
 	}
 
 	/// <summary>
@@ -317,12 +323,12 @@ public class UIManager : MonoBehaviour
 	private void UpdateControlsMenu()
 	{
 		// Show or hide the back and next buttons
-		backButton.SetActive(controlsTextIndex != 0);
-		nextButton.SetActive(controlsTextIndex != controlsParent.transform.GetChild(0).GetChild(1).childCount - 1);
+		backButton.gameObject.SetActive(controlsTextIndex != 0);
+		nextButton.gameObject.SetActive(controlsTextIndex != controlsTextParent.transform.childCount - 1);
 
 		// Show the right text
-		for(int i = 0; i < controlsParent.transform.GetChild(0).GetChild(1).childCount; i++)
-			controlsParent.transform.GetChild(0).GetChild(1).GetChild(i).gameObject.SetActive(i == controlsTextIndex);
+		for(int i = 0; i < controlsTextParent.transform.childCount; i++)
+			controlsTextParent.transform.GetChild(i).gameObject.SetActive(i == controlsTextIndex);
 	}
 
 	/// <summary>
