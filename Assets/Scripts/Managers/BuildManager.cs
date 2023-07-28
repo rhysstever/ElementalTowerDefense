@@ -140,10 +140,10 @@ public class BuildManager : MonoBehaviour
 
 		// Check if the player has enough money
 		TowerType upgradeType = TowerManager.instance.TowerInfo[baseType].Upgrades[type];
-		int cost = TowerManager.instance.TowerInfo[upgradeType].Cost;
-		if(GameManager.instance.Money < cost)
+		int remainingCost = TowerManager.instance.TowerInfo[upgradeType].Cost - TowerManager.instance.TowerInfo[baseType].Cost;
+		if(GameManager.instance.Money < remainingCost)
 		{
-			Debug.Log("Not enough money! " + cost + " needed.");
+			Debug.Log("Not enough money! " + remainingCost + " needed.");
 			return false;
 		}
 
