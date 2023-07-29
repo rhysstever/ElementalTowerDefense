@@ -51,7 +51,7 @@ public class TowerManager : MonoBehaviour
 	private Dictionary<TowerType, Sprite> bulletSprites;
 	private Dictionary<TowerType, TowerInfo> towerInfo;
 	private TowerType selectedTypeInfo;
-
+	
 	// Properties
 	public GameObject TowerPrefab { get { return towerPrefab; } }
 	public Dictionary<TowerType, TowerInfo> TowerInfo { get { return towerInfo; } }
