@@ -34,36 +34,38 @@ public class GameManager : MonoBehaviour
 	private int health;
 	private int money;
 
-	private MenuState currentMenuState;
+	[SerializeField]
+	private Stack<MenuState> menuStateStack;
 
 	// Properties
 	public int Health { get { return health; } }
 	public int Money { get { return money; } }
-	public MenuState CurrentMenuState { get { return currentMenuState; } }
+	public MenuState CurrentMenuState { get { return menuStateStack.Peek(); } }
 
 	// Start is called before the first frame update
 	void Start()
 	{
-		ChangeMenuState(MenuState.MainMenu);
+		menuStateStack = new Stack<MenuState>();
+		MenuStateNew(MenuState.MainMenu);
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
 		// Recurring logic that runs dependant on the current MenuState
-		switch(currentMenuState)
+		switch(menuStateStack.Peek())
 		{
 			case MenuState.MainMenu:
 				break;
 			case MenuState.Game:
 				// ESC key pauses the game
 				if(Input.GetKeyDown(KeyCode.P))
-					ChangeMenuState(MenuState.Pause);
+					MenuStateNew(MenuState.Pause);
 				break;
 			case MenuState.Pause:
 				// ESC key unpauses the game
 				if(Input.GetKeyDown(KeyCode.P))
-					ChangeMenuState(MenuState.Game);
+					MenuStateBack();
 				break;
 			case MenuState.GameEnd:
 				break;
@@ -71,12 +73,39 @@ public class GameManager : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Performs inital logic when the menu state changes
+	/// Adds a menu menu to the menu stack
 	/// </summary>
-	/// <param name="newMenuState">The new menu state</param>
-	public void ChangeMenuState(MenuState newMenuState)
+	/// <param name="newMenuState">The new menu being shown</param>
+	public void MenuStateNew(MenuState newMenuState)
 	{
-		switch(newMenuState)
+		if(newMenuState == MenuState.MainMenu
+			|| newMenuState == MenuState.Game)
+		{
+			menuStateStack.Clear();
+			UIManager.instance.ClearMenuStateUI();
+		}
+
+		MenuStateEnter(newMenuState);
+		menuStateStack.Push(newMenuState);
+		UIManager.instance.ShowMenuStateUI(menuStateStack.Peek());
+	}
+
+	/// <summary>
+	/// Returns to the previous menu
+	/// </summary>
+	public void MenuStateBack()
+	{
+		MenuState leavingMenuState = menuStateStack.Pop();
+		UIManager.instance.HideMenuStateUI(leavingMenuState);
+	}
+
+	/// <summary>
+	/// Initial Logic for entering a menu
+	/// </summary>
+	/// <param name="menuState">The new menu being shown</param>
+	private void MenuStateEnter(MenuState menuState)
+	{
+		switch(menuState)
 		{
 			case MenuState.MainMenu:
 				health = 100;
@@ -86,13 +115,8 @@ public class GameManager : MonoBehaviour
 				MapManager.instance.ClearMap();
 				break;
 			case MenuState.Game:
-				// If the player is going from the Main Menu to the Game state
-				if(currentMenuState == MenuState.MainMenu)
-				{
-					MapManager.instance.SpawnCurrentMap();  // Create the map
-					EnemyManager.instance.SetupEnemyWaves();
-				}
-
+				MapManager.instance.SpawnCurrentMap();  // Create the map
+				EnemyManager.instance.SetupEnemyWaves();
 				BuildManager.instance.Select(null); // Set initial selection
 				break;
 			case MenuState.Pause:
@@ -100,14 +124,8 @@ public class GameManager : MonoBehaviour
 			case MenuState.Controls:
 				break;
 			case MenuState.GameEnd:
-				UIManager.instance.UpdateGameEndText(health > 0);
 				break;
 		}
-
-		currentMenuState = newMenuState;
-
-		// Update UI
-		UIManager.instance.ChangeMenuStateUI(currentMenuState);
 	}
 
 	/// <summary>
@@ -116,7 +134,7 @@ public class GameManager : MonoBehaviour
 	/// <param name="hasPlayerWon">Whether the player has won the game</param>
 	public void EndGame(bool hasPlayerWon)
 	{
-		ChangeMenuState(MenuState.GameEnd);
+		MenuStateNew(MenuState.GameEnd);
 	}
 
 	/// <summary>
@@ -129,7 +147,7 @@ public class GameManager : MonoBehaviour
 
 		// Changes the menu state to Game Over if the player loses all health
 		if(health <= 0)
-			ChangeMenuState(MenuState.GameEnd);
+			MenuStateNew(MenuState.GameEnd);
 
 		// Update UI
 		UIManager.instance.UpdatePlayerHealthText();

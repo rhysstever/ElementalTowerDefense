@@ -62,7 +62,6 @@ public class UIManager : MonoBehaviour
 	private Button gameEndToMainButton;
 
 	private Dictionary<MenuState, GameObject> menuStateUIParents;
-	private MenuState menuStateBeforeControlsMenu;
 	private int controlsTextIndex;
 
 	// Properties
@@ -74,7 +73,6 @@ public class UIManager : MonoBehaviour
 		LinkMenuStateParents();
 		SetupUI();
 
-		menuStateBeforeControlsMenu = MenuState.MainMenu;
 		controlsTextIndex = -1;
 	}
 
@@ -106,14 +104,14 @@ public class UIManager : MonoBehaviour
 	private void SetupUI()
 	{
 		// Menu buttons
-		playButton.onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.Game));
-		mainMenuToControlsButton.onClick.AddListener(() => OpenControlsMenu(MenuState.MainMenu));
+		playButton.onClick.AddListener(() => GameManager.instance.MenuStateNew(MenuState.Game));
+		mainMenuToControlsButton.onClick.AddListener(() => OpenControlsMenu());
 		quitButton.onClick.AddListener(() => QuitGame());
-		pauseGameButton.onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.Pause));
-		resumeButton.onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.Game));
-		pauseToControlsButton.onClick.AddListener(() => OpenControlsMenu(MenuState.Pause));
-		pauseToMainButton.onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.MainMenu));
-		gameEndToMainButton.onClick.AddListener(() => GameManager.instance.ChangeMenuState(MenuState.MainMenu));
+		pauseGameButton.onClick.AddListener(() => GameManager.instance.MenuStateNew(MenuState.Pause));
+		resumeButton.onClick.AddListener(() => GameManager.instance.MenuStateBack());
+		pauseToControlsButton.onClick.AddListener(() => OpenControlsMenu());
+		pauseToMainButton.onClick.AddListener(() => GameManager.instance.MenuStateNew(MenuState.MainMenu));
+		gameEndToMainButton.onClick.AddListener(() => GameManager.instance.MenuStateNew(MenuState.MainMenu));
 
 		// Tower info panel open/close buttons
 		openTowerPanelButton.onClick.AddListener(() => SetTowerPanelActive(true));
@@ -139,29 +137,45 @@ public class UIManager : MonoBehaviour
 				() => UpdateSelectedTypeInfoUI(towerInfoButton.GetComponent<Tower>().Type));
 
 		// Controls buttons
-		closeControlsButton.onClick.AddListener(() => GameManager.instance.ChangeMenuState(menuStateBeforeControlsMenu));
+		closeControlsButton.onClick.AddListener(() => GameManager.instance.MenuStateBack());
 		nextButton.onClick.AddListener(() => NextControlsText());
 		backButton.onClick.AddListener(() => BackControlsText());
 	}
 
-	/// <summary>
-	/// Hide or show UI parents based on the new menu state
-	/// </summary>
-	/// <param name="newMenuState">The new menu state</param>
-	public void ChangeMenuStateUI(MenuState newMenuState)
+	public void ShowMenuStateUI(MenuState menuState)
 	{
-		foreach(MenuState menuState in menuStateUIParents.Keys)
-		{
-			// Dont hide the game menu UI when the game is paused
-			if(newMenuState == MenuState.Pause
-				&& menuState == MenuState.Game)
-				continue;
-			else
-				menuStateUIParents[menuState].SetActive(menuState == newMenuState);
+		menuStateUIParents[menuState].SetActive(true);
 
-			// Hide the tower panel initially
-			if(newMenuState == MenuState.Game)
+		if(menuState == MenuState.Game)
+
+		switch(menuState)
+		{
+			case MenuState.MainMenu:
+				break;
+			case MenuState.Game:
+				// Hide the tower type info panel
 				typeInfoPanel.SetActive(false);
+				break;
+			case MenuState.Pause:
+				break;
+			case MenuState.Controls:
+				break;
+			case MenuState.GameEnd:
+				UpdateGameEndText(GameManager.instance.Health > 0);
+				break;
+		}
+	}
+
+	public void HideMenuStateUI(MenuState menuState)
+	{
+		menuStateUIParents[menuState].SetActive(false);
+	}
+
+	public void ClearMenuStateUI()
+	{
+		foreach(GameObject menuStateParent in menuStateUIParents.Values)
+		{
+			menuStateParent.SetActive(false);
 		}
 	}
 
@@ -291,12 +305,11 @@ public class UIManager : MonoBehaviour
 	/// Open the controls menu panel
 	/// </summary>
 	/// <param name="previousMenuState">The previous state of the game</param>
-	private void OpenControlsMenu(MenuState previousMenuState)
+	private void OpenControlsMenu()
 	{
 		controlsTextIndex = -1;
 		NextControlsText();
-		menuStateBeforeControlsMenu = previousMenuState;
-		GameManager.instance.ChangeMenuState(MenuState.Controls);
+		GameManager.instance.MenuStateNew(MenuState.Controls);
 	}
 
 	/// <summary>
