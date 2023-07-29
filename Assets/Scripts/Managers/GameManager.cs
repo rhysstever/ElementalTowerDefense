@@ -57,12 +57,12 @@ public class GameManager : MonoBehaviour
 				break;
 			case MenuState.Game:
 				// ESC key pauses the game
-				if(Input.GetKeyDown(KeyCode.Escape))
+				if(Input.GetKeyDown(KeyCode.P))
 					ChangeMenuState(MenuState.Pause);
 				break;
 			case MenuState.Pause:
 				// ESC key unpauses the game
-				if(Input.GetKeyDown(KeyCode.Escape))
+				if(Input.GetKeyDown(KeyCode.P))
 					ChangeMenuState(MenuState.Game);
 				break;
 			case MenuState.GameEnd:
